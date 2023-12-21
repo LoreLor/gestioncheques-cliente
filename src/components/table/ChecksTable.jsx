@@ -3,20 +3,21 @@ import { useState, useRef } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileExcel, faFilePdf, faPrint } from "@fortawesome/free-solid-svg-icons";
+import {
+    faFileExcel,
+    faFilePdf,
+    faPrint,
+} from "@fortawesome/free-solid-svg-icons";
 import { CSVLink } from "react-csv";
-import { useReactToPrint } from 'react-to-print';
+import { useReactToPrint } from "react-to-print";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { customStyles } from './ChecksTable';
-
-
+import { customStyles } from "./ChecksTableCss";
 
 const ChecksTable = () => {
-    
     const data = [
         {
-            id:1,
+            id: 1,
             fechaRecepcion: "2024-02-25",
             entregadoPor: "Piruli",
             numeroCheque: "423423",
@@ -31,7 +32,7 @@ const ChecksTable = () => {
             activo: true,
         },
         {
-            id:2,
+            id: 2,
             fechaRecepcion: "2024-04-12",
             entregadoPor: "Piruli2",
             numeroCheque: "423423",
@@ -46,7 +47,7 @@ const ChecksTable = () => {
             activo: true,
         },
         {
-            id:3,
+            id: 3,
             fechaRecepcion: "2024-07-12",
             entregadoPor: "Piruli3",
             numeroCheque: "423423",
@@ -63,63 +64,63 @@ const ChecksTable = () => {
     ];
     const columns = [
         {
-            name:"id",
-            selector: row => row.id,
-            grow:1,
-            maxWidth:'1px',
+            name: "id",
+            selector: (row) => row.id,
+            grow: 1,
+            maxWidth: "1px",
         },
         {
-            name:"Fecha de Recepcion",
-            selector: row => row.fechaRecepcion,
+            name: "Fecha de Recepcion",
+            selector: (row) => row.fechaRecepcion,
             sortable: true,
-            flexWrap: 'wrap'
+            flexWrap: "wrap",
         },
         {
-            name:"Entregado Por",
-            selector: row => row.entregadoPor,
-            sortable: true,
-        },
-        {
-            name:"Numero de Cheque",
-            selector: row => row.numeroCheque,
-        },
-        {
-            name:"Banco",
-            selector: row => row.banco,
+            name: "Entregado Por",
+            selector: (row) => row.entregadoPor,
             sortable: true,
         },
         {
-            name:"Monto",
-            selector: row => row.monto,
+            name: "Numero de Cheque",
+            selector: (row) => row.numeroCheque,
+        },
+        {
+            name: "Banco",
+            selector: (row) => row.banco,
             sortable: true,
         },
         {
-            name:"Titular del Cheque",
-            selector: row => row.titularCheque,
+            name: "Monto",
+            selector: (row) => row.monto,
             sortable: true,
         },
         {
-            name:"Cuit",
-            selector: row => row.cuit,
+            name: "Titular del Cheque",
+            selector: (row) => row.titularCheque,
+            sortable: true,
+        },
+        {
+            name: "Cuit",
+            selector: (row) => row.cuit,
         },
         {
             name: "Fecha de Cobro",
-            selector: row => row.fechaCobro,
+            selector: (row) => row.fechaCobro,
             sortable: true,
         },
         {
-            name:"Estado",
-            selector: row => row.estado,
+            name: "Estado",
+            selector: (row) => row.estado,
             sortable: true,
         },
         {
-            name:"Destino",
-            selector: row => row.nombreDestino,
+            name: "Destino",
+            selector: (row) => row.nombreDestino,
             sortable: true,
         },
         {
-            name:"Codigo Destino",
-            selector: row => row.codigoDestino,
+            name: "Codigo Destino",
+            selector: (row) => row.codigoDestino,
             sortable: true,
         },
         // {
@@ -130,22 +131,26 @@ const ChecksTable = () => {
     ];
 
     const [inputData, setInputData] = useState(data);
-    
+
     // manejo de etado search
     const handleFilter = (e) => {
         const searchText = e.target.value.toLowerCase();
-        const filterData = data.filter(row => row.banco.toLowerCase().includes(searchText));
-        if(filterData){
+        const filterData = data.filter((row) =>
+            row.banco.toLowerCase().includes(searchText)
+        );
+        if (filterData) {
             setInputData(filterData);
         } else {
             setInputData(inputData);
         }
-    }
+    };
 
     // Función para exportar a PDF
     const handleExportPDF = () => {
-        const pdfColumns = columns.map(col => col.name);
-        const pdfData = inputData.map(row => columns.map(col => row[col.selector]));
+        const pdfColumns = columns.map((col) => col.name);
+        const pdfData = inputData.map((row) =>
+            columns.map((col) => row[col.selector])
+        );
 
         const doc = new jsPDF();
         doc.autoTable({
@@ -161,41 +166,43 @@ const ChecksTable = () => {
         content: () => print.current,
     });
 
-
     return (
         <section id="tableCheck" className="pt-5">
             <h2 className="text-center">Listado de Cheques</h2>
-            <div className="container mt-5"  ref={print}>
+            <div className="container mt-5" ref={print}>
                 <div className="row py-3">
                     <div className="col-md-6 text-start">
                         <CSVLink data={data} className="btn btn-success ms-2">
                             <FontAwesomeIcon icon={faFileExcel} />
                         </CSVLink>
-                        <button 
-                            className="btn btn-danger ms-2" 
+                        <button
+                            className="btn btn-danger ms-2"
                             onClick={handleExportPDF}
                         >
                             <FontAwesomeIcon icon={faFilePdf} />
                         </button>
                         <button
-                            className="btn btn-secondary ms-2" 
+                            className="btn btn-secondary ms-2"
                             onClick={handlePrint}
                         >
                             <FontAwesomeIcon icon={faPrint} />
                         </button>
                     </div>
                     <div className="col-md-6 text-end">
-                        <label>Buscar por Banco: {' '}
-                            <input 
-                                type="text" 
+                        <label>
+                            Buscar por Banco:{" "}
+                            <input
+                                type="text"
                                 onChange={handleFilter}
                                 name="search"
                             />
                         </label>
                     </div>
                 </div>
-                
-                <StyleSheetManager shouldForwardProp={(prop) => prop !== 'sortActive'}>
+
+                <StyleSheetManager
+                    shouldForwardProp={(prop) => prop !== "sortActive"}
+                >
                     <DataTable
                         columns={columns}
                         data={inputData}

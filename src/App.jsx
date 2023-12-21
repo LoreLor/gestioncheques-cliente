@@ -1,11 +1,12 @@
 import './App.css'
-import ChecksTable from './components/table/ChecksTable'
+import Home from './components/home/Home'
+
 
 function App() {
 
     return (
         <>
-            <ChecksTable />
+            <Home />
         </>
     )
 }
