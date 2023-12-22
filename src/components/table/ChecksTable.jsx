@@ -4,9 +4,12 @@ import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+    faEdit,
+    faEye,
     faFileExcel,
     faFilePdf,
     faPrint,
+    faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useReactToPrint } from "react-to-print";
@@ -19,112 +22,152 @@ import { DownloadExcel } from "react-excel-export";
 
 
 const ChecksTable = () => {
+
+    const handleView = (id) => {}
+
+    const handleEdit = (id) => {};
+
+    const handleDelete = (id) => {};
+
+
     const data = [
         {
             id: 1,
             fechaRecepcion: "2024-02-25",
-            entregadoPor: "Piruli",
+            fechaCobro: "2025-12-24",
             numeroCheque: "423423",
             banco: "Frances",
             monto: 50000,
-            titularCheque: "Pirulo",
-            cuit: "21-3454232432",
-            fechaCobro: "2025-12-24",
-            estado: "pendiente",
+            estado: "rechazado",
             nombreDestino: "Elo",
-            codigoDestino: "E1",
-            activo: true,
+            //entregadoPor: "Piruli",
+            // titularCheque: "Pirulo",
+            // cuit: "21-3454232432",
+            // codigoDestino: "E1",
+            // activo: true,
         },
         {
             id: 2,
             fechaRecepcion: "2024-04-12",
-            entregadoPor: "Piruli2",
+            fechaCobro: "2025-12-24",
             numeroCheque: "423423",
             banco: "Galicia",
             monto: 50000,
-            titularCheque: "Pirulo2",
-            cuit: "21-3454232432",
-            fechaCobro: "2025-12-24",
-            estado: "pendiente",
+            estado: "cobrado",
             nombreDestino: "Elo2",
-            codigoDestino: "E2",
-            activo: true,
+            // entregadoPor: "Piruli2",
+            // titularCheque: "Pirulo2",
+            // cuit: "21-3454232432",
+            // codigoDestino: "E2",
+            // activo: true,
         },
         {
             id: 3,
             fechaRecepcion: "2024-07-12",
-            entregadoPor: "Piruli3",
+            fechaCobro: "2025-12-24",
             numeroCheque: "423423",
             banco: "Patagonia",
             monto: 50000,
-            titularCheque: "Pirulo3",
-            cuit: "21-3454232432",
-            fechaCobro: "2025-12-24",
             estado: "pendiente",
             nombreDestino: "Elo3",
-            codigoDestino: "E3",
-            activo: true,
+            // cuit: "21-3454232432",
+            // titularCheque: "Pirulo3",
+            // entregadoPor: "Piruli3",
+            // codigoDestino: "E3",
+            // activo: true,
         },
     ];
     const columns = [
         {
-            name: "id",
+            name:"#",
             selector: (row) => row.id,
-            grow: 1,
+            grow:1,
         },
         {
-            name: "Fecha de Recepcion",
+            name: "Acciones",
+            grow:2,
+            cell: (row) => (
+                <div>
+                    <a href="" className="me-3" onClick={() => handleView(row.id)}>
+                        <FontAwesomeIcon icon={faEye} className="iconActions"/>
+                    </a>
+                    <a href="" className="me-3" onClick={() => handleEdit(row.id)}>
+                        <FontAwesomeIcon icon={faEdit} className="iconActions"/>
+                    </a>
+                    <a href="" className="me-2"  onClick={() => handleDelete(row.id)}>
+                        <FontAwesomeIcon icon={faTrash} className="iconActions"/>
+                    </a>
+                </div>
+            ),
+        },
+        {
+            name: "Fecha Ingreso",
             selector: (row) => row.fechaRecepcion,
             sortable: true,
+            grow:2,
         },
         {
-            name: "Entregado Por",
-            selector: (row) => row.entregadoPor,
+            name: "Fecha Cobro",
+            selector: (row) => row.fechaCobro,
             sortable: true,
+            grow:2,
         },
+        // {
+        //     name: "Entregado Por",
+        //     selector: (row) => row.entregadoPor,
+        //     sortable: true,
+        // },
         {
-            name: "Numero de Cheque",
+            name: "N° Cheque",
             selector: (row) => row.numeroCheque,
         },
         {
             name: "Banco",
             selector: (row) => row.banco,
             sortable: true,
+            grow:2,
         },
         {
             name: "Monto",
             selector: (row) => row.monto,
             sortable: true,
         },
-        {
-            name: "Titular del Cheque",
-            selector: (row) => row.titularCheque,
-            sortable: true,
-        },
-        {
-            name: "Cuit",
-            selector: (row) => row.cuit,
-        },
-        {
-            name: "Fecha de Cobro",
-            selector: (row) => row.fechaCobro,
-            sortable: true,
-        },
+        // {
+        //     name: "Titular del Cheque",
+        //     selector: (row) => row.titularCheque,
+        //     sortable: true,
+        // },
+        // {
+        //     name: "Cuit",
+        //     selector: (row) => row.cuit,
+        // },
+      
         {
             name: "Estado",
             selector: (row) => row.estado,
-            sortable: true,
+            cell: (row) => (
+                <div>
+                    {row.estado === "pendiente" && (
+                        <span className="badge bg-warning text-dark p-2">Pendiente</span>
+                    )}
+                    {row.estado === "rechazado" && (
+                        <span className="badge bg-danger p-2">Rechazado</span>
+                    )}
+                    {row.estado === "cobrado" && (
+                        <span className="badge bg-success p-2">Cobrado</span>
+                    )}
+                </div>)
         },
         {
             name: "Destino",
             selector: (row) => row.nombreDestino,
             sortable: true,
         },
-        {
-            name: "Codigo Destino",
-            selector: (row) => row.codigoDestino,
-            sortable: true,
-        },
+        // {
+        //     name: "Codigo Destino",
+        //     selector: (row) => row.codigoDestino,
+        //     sortable: true,
+        // },
         // {
         //     name:"Está Activo?",
         //     selector: row => row.activo,

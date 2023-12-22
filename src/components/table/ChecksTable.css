@@ -5,3 +5,16 @@
 button {
     border:none;
 }
+
+.iconActions{
+    color: #797070;
+    transition: all 0.2s ease-in-out;
+}
+
+.iconActions:hover{
+    color: #313030;
+}
+
+.badge{
+    width: 5rem;
+}
