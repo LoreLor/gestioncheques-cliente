@@ -8,11 +8,15 @@ import {
     faFilePdf,
     faPrint,
 } from "@fortawesome/free-solid-svg-icons";
-import { CSVLink } from "react-csv";
+
 import { useReactToPrint } from "react-to-print";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { customStyles } from "./ChecksTableCss";
+import './ChecksTable.css';
+import { DownloadExcel } from "react-excel-export";
+
+
 
 const ChecksTable = () => {
     const data = [
@@ -67,13 +71,11 @@ const ChecksTable = () => {
             name: "id",
             selector: (row) => row.id,
             grow: 1,
-            maxWidth: "1px",
         },
         {
             name: "Fecha de Recepcion",
             selector: (row) => row.fechaRecepcion,
             sortable: true,
-            flexWrap: "wrap",
         },
         {
             name: "Entregado Por",
@@ -172,9 +174,17 @@ const ChecksTable = () => {
             <div className="container mt-5" ref={print}>
                 <div className="row py-3">
                     <div className="col-md-6 text-start">
-                        <CSVLink data={data} className="btn btn-success ms-2">
-                            <FontAwesomeIcon icon={faFileExcel} />
-                        </CSVLink>
+                        <DownloadExcel
+                            data={data}
+                            buttonLabel={
+                                <div className="btn btn-success">
+                                    <FontAwesomeIcon icon={faFileExcel} className="px-1"/>
+                                </div>
+                            }
+                            fileName="Libro1"
+                            className="export-button  border-0"
+                        />
+                        
                         <button
                             className="btn btn-danger ms-2"
                             onClick={handleExportPDF}

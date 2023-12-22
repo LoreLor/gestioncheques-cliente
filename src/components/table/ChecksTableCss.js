@@ -12,13 +12,13 @@ export const customStyles = {
             justifyContent: 'center',
             alignItems: 'center',
             height:'100%',
-            padding: '5px',
+            padding: '8px',
             backgroundColor: '#f3f3ec',
             color: '#0c032ef8',
-            fontSize: '1rem',
-            width: '15%',
+            fontSize: '0.8rem',
             textAlign: 'center',
         },
+        classes: 'bozQpI',
     },
     cells: {
         style: {
