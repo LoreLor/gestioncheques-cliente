@@ -23,11 +23,11 @@ import { DownloadExcel } from "react-excel-export";
 
 const ChecksTable = () => {
 
-    const handleView = (id) => {}
+    // const handleView = (id) => {}
 
-    const handleEdit = (id) => {};
+    // const handleEdit = (id) => {};
 
-    const handleDelete = (id) => {};
+    // const handleDelete = (id) => {};
 
 
     const data = [
@@ -86,15 +86,16 @@ const ChecksTable = () => {
         {
             name: "Acciones",
             grow:2,
+            // eslint-disable-next-line no-unused-vars
             cell: (row) => (
                 <div>
-                    <a href="" className="me-3" onClick={() => handleView(row.id)}>
+                    <a href="" className="me-3" /* onClick={() => handleView(row.id)}*/>
                         <FontAwesomeIcon icon={faEye} className="iconActions"/>
                     </a>
-                    <a href="" className="me-3" onClick={() => handleEdit(row.id)}>
+                    <a href="" className="me-3" /*onClick={() => handleEdit(row.id)}*/>
                         <FontAwesomeIcon icon={faEdit} className="iconActions"/>
                     </a>
-                    <a href="" className="me-2"  onClick={() => handleDelete(row.id)}>
+                    <a href="" className="me-2" /* onClick={() => handleDelete(row.id)}*/>
                         <FontAwesomeIcon icon={faTrash} className="iconActions"/>
                     </a>
                 </div>
