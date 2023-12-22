@@ -4,6 +4,7 @@ export const customStyles = {
             minHeight: '2rem', 
             background:'#FEF9E7 ',
             textAlign: 'center',
+            width: '100%',
         },
     },
     headCells: {
@@ -12,11 +13,13 @@ export const customStyles = {
             justifyContent: 'center',
             alignItems: 'center',
             height:'100%',
-            padding: '8px',
             backgroundColor: '#f3f3ec',
             color: '#0c032ef8',
             fontSize: '0.8rem',
             textAlign: 'center',
+            paddingLeft: '15px',
+            paddingRight: '10px',
+            
         },
         classes: 'bozQpI',
     },
@@ -25,10 +28,7 @@ export const customStyles = {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            paddingLeft: '5px', 
-            paddingRight: '5px',
-            width: '15%',
-            textAlign: 'center',
+            border:'1px solid #f8d86e'
         },
     },
     
