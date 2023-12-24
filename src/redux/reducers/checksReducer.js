@@ -3,7 +3,7 @@ import {
     ALL_CHECKS_ERROR,
     ALL_CHECKS_REQUEST,
     ALL_CHECKS_SUCCESS,
-} from "../actions/cheks/actionsType";
+} from "../actions/checks/actionsType";
 
 const initialState = {
     cheks: [],

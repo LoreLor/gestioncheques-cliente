@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 //import React from "react";
 import { useState, useRef, useEffect } from "react";
 import DataTable from "react-data-table-component";
@@ -19,7 +20,7 @@ import { customStyles } from "./ChecksTableCss";
 import './ChecksTable.css';
 import { DownloadExcel } from "react-excel-export";
 import { useDispatch, useSelector } from "react-redux";
-import { allChecks } from "../../redux/actions/cheks";
+import { allChecks } from "../../redux/actions/checks";
 import { dateFormat } from "../../utils/dateFormat";
 import Loader from "../loader/Loader";
 
@@ -32,7 +33,12 @@ const ChecksTable = () => {
     const [inputData, setInputData] = useState(checks);
 
     useEffect(() => {
-        dispatch(allChecks())
+        const timeout = setTimeout(() => {
+            dispatch(allChecks())
+
+        }, 2000);
+
+        return () => clearTimeout(timeout)
     },[]);
 
     useEffect(() => {
