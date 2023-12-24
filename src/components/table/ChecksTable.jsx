@@ -1,5 +1,5 @@
 //import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,10 +18,26 @@ import "jspdf-autotable";
 import { customStyles } from "./ChecksTableCss";
 import './ChecksTable.css';
 import { DownloadExcel } from "react-excel-export";
+import { useDispatch, useSelector } from "react-redux";
+import { allChecks } from "../../redux/actions/cheks";
+import { dateFormat } from "../../utils/dateFormat";
+import Loader from "../loader/Loader";
 
 
 
 const ChecksTable = () => {
+    const dispatch = useDispatch();
+    const checksList = useSelector(state => state.checks);
+    const { checks, loading } = checksList;
+    const [inputData, setInputData] = useState(checks);
+
+    useEffect(() => {
+        dispatch(allChecks())
+    },[]);
+
+    useEffect(() => {
+        setInputData(checks)
+    },[checks]);
 
     // const handleView = (id) => {}
 
@@ -30,59 +46,40 @@ const ChecksTable = () => {
     // const handleDelete = (id) => {};
 
 
-    const data = [
-        {
-            id: 1,
-            fechaRecepcion: "2024-02-25",
-            fechaCobro: "2025-12-24",
-            numeroCheque: "423423",
-            banco: "Frances",
-            monto: 50000,
-            estado: "rechazado",
-            nombreDestino: "Elo",
-            //entregadoPor: "Piruli",
-            // titularCheque: "Pirulo",
-            // cuit: "21-3454232432",
-            // codigoDestino: "E1",
-            // activo: true,
-        },
-        {
-            id: 2,
-            fechaRecepcion: "2024-04-12",
-            fechaCobro: "2025-12-24",
-            numeroCheque: "423423",
-            banco: "Galicia",
-            monto: 50000,
-            estado: "cobrado",
-            nombreDestino: "Elo2",
-            // entregadoPor: "Piruli2",
-            // titularCheque: "Pirulo2",
-            // cuit: "21-3454232432",
-            // codigoDestino: "E2",
-            // activo: true,
-        },
-        {
-            id: 3,
-            fechaRecepcion: "2024-07-12",
-            fechaCobro: "2025-12-24",
-            numeroCheque: "423423",
-            banco: "Patagonia",
-            monto: 50000,
-            estado: "pendiente",
-            nombreDestino: "Elo3",
-            // cuit: "21-3454232432",
-            // titularCheque: "Pirulo3",
-            // entregadoPor: "Piruli3",
-            // codigoDestino: "E3",
-            // activo: true,
-        },
-    ];
+    // const data = [
+
+    //     {
+    //         id: 2,
+    //         fechaRecepcion: "2024-04-12",
+    //         fechaCobro: "2025-12-24",
+    //         numeroCheque: "423423",
+    //         banco: "Galicia",
+    //         monto: 50000,
+    //         estado: "cobrado",
+    //         nombreDestino: "Elo2",
+    //         // entregadoPor: "Piruli2",
+    //         // titularCheque: "Pirulo2",
+    //         // cuit: "21-3454232432",
+    //         // codigoDestino: "E2",
+    //         // activo: true,
+    //     },
+    //     {
+    //         id: 3,
+    //         fechaRecepcion: "2024-07-12",
+    //         fechaCobro: "2025-12-24",
+    //         numeroCheque: "423423",
+    //         banco: "Patagonia",
+    //         monto: 50000,
+    //         estado: "pendiente",
+    //         nombreDestino: "Elo3",
+    //         // cuit: "21-3454232432",
+    //         // titularCheque: "Pirulo3",
+    //         // entregadoPor: "Piruli3",
+    //         // codigoDestino: "E3",
+    //         // activo: true,
+    //     },
+    // ];
     const columns = [
-        {
-            name:"#",
-            selector: (row) => row.id,
-            grow:1,
-        },
         {
             name: "Acciones",
             grow:2,
@@ -103,21 +100,16 @@ const ChecksTable = () => {
         },
         {
             name: "Fecha Ingreso",
-            selector: (row) => row.fechaRecepcion,
+            selector: (row) => dateFormat(row.fechaRecepcion),
             sortable: true,
             grow:2,
         },
         {
             name: "Fecha Cobro",
-            selector: (row) => row.fechaCobro,
+            selector: (row) => dateFormat(row.fechaCobro),
             sortable: true,
             grow:2,
         },
-        // {
-        //     name: "Entregado Por",
-        //     selector: (row) => row.entregadoPor,
-        //     sortable: true,
-        // },
         {
             name: "N° Cheque",
             selector: (row) => row.numeroCheque,
@@ -133,16 +125,11 @@ const ChecksTable = () => {
             selector: (row) => row.monto,
             sortable: true,
         },
-        // {
-        //     name: "Titular del Cheque",
-        //     selector: (row) => row.titularCheque,
-        //     sortable: true,
-        // },
-        // {
-        //     name: "Cuit",
-        //     selector: (row) => row.cuit,
-        // },
-      
+        {
+            name: "Destino",
+            selector: (row) => row.nombreDestino,
+            sortable: true,
+        },
         {
             name: "Estado",
             selector: (row) => row.estado,
@@ -159,29 +146,12 @@ const ChecksTable = () => {
                     )}
                 </div>)
         },
-        {
-            name: "Destino",
-            selector: (row) => row.nombreDestino,
-            sortable: true,
-        },
-        // {
-        //     name: "Codigo Destino",
-        //     selector: (row) => row.codigoDestino,
-        //     sortable: true,
-        // },
-        // {
-        //     name:"Está Activo?",
-        //     selector: row => row.activo,
-        //     sortable: true
-        // }
     ];
-
-    const [inputData, setInputData] = useState(data);
 
     // manejo de etado search
     const handleFilter = (e) => {
         const searchText = e.target.value.toLowerCase();
-        const filterData = data.filter((row) =>
+        const filterData = checks.filter((row) =>
             row.banco.toLowerCase().includes(searchText)
         );
         if (filterData) {
@@ -217,9 +187,10 @@ const ChecksTable = () => {
             <h2 className="text-center">Listado de Cheques</h2>
             <div className="container mt-5" ref={print}>
                 <div className="row py-3">
+                    {/* Btns Actions */}
                     <div className="col-md-6 text-start">
                         <DownloadExcel
-                            data={data}
+                            data={inputData}
                             buttonLabel={
                                 <div className="btn btn-success">
                                     <FontAwesomeIcon icon={faFileExcel} className="px-1"/>
@@ -242,6 +213,7 @@ const ChecksTable = () => {
                             <FontAwesomeIcon icon={faPrint} />
                         </button>
                     </div>
+                    {/* Input Search */}
                     <div className="col-md-6 text-end">
                         <label>
                             Buscar por Banco:{" "}
@@ -254,18 +226,23 @@ const ChecksTable = () => {
                     </div>
                 </div>
 
-                <StyleSheetManager
-                    shouldForwardProp={(prop) => prop !== "sortActive"}
-                >
-                    <DataTable
-                        columns={columns}
-                        data={inputData}
-                        customStyles={customStyles}
-                        // selectableRows
-                        fixedHeader
-                        pagination
-                    ></DataTable>
-                </StyleSheetManager>
+                {/* Tabla */}
+                {
+                    loading ? <Loader /> : (
+                        <StyleSheetManager
+                            shouldForwardProp={(prop) => prop !== "sortActive"}
+                        >
+                            <DataTable
+                                columns={columns}
+                                data={inputData}
+                                customStyles={customStyles}
+                                // selectableRows
+                                fixedHeader
+                                pagination
+                            ></DataTable>
+                        </StyleSheetManager>
+                    )
+                }
             </div>
         </section>
     );
