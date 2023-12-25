@@ -15,7 +15,10 @@ module.exports = {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
+      { enforceDynamicLinks: "always" }
     ],
-    "indent": ["error", 4]
+    "indent": ["error", 4],
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"]
   },
 }

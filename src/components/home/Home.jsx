@@ -1,4 +1,4 @@
-import ChecksTable from "../table/ChecksTable"
+import ChecksTable from "../table/ChecksTable";
 
 
 const Home = () => {
@@ -6,7 +6,7 @@ const Home = () => {
         <>
             <ChecksTable />
         </>
-    )
-}
+    );
+};
 
-export default Home
+export default Home;
