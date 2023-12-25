@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { detailCheck } from "../../redux/actions/checks";
 import DetailCheck from "../check/DetailCheck";
 
-const ModalView = ({ id, showModal, handleCloseModal }) => {
+const ModalView = ({ id }) => {
     const dispatch = useDispatch();
     const checkDetail = useSelector((state) => state.detailCheck);
-    const {detail, loading} = checkDetail;
+    const { detail, loading } = checkDetail;
 
     useEffect(() => {
         if (id) {
@@ -16,12 +16,11 @@ const ModalView = ({ id, showModal, handleCloseModal }) => {
 
     return (
         <div
-            className={`modal ${showModal ? "show" : ""}`}
+            className="modal fade"
             tabIndex="-1"
             id="detailModal"
             aria-labelledby="detailModalLabel"
-            aria-hidden={!showModal}
-            style={{ display: showModal ? "block" : "none" }}
+            aria-hidden="true"
         >
             <div className="modal-dialog">
                 <div className="modal-content">
@@ -31,10 +30,9 @@ const ModalView = ({ id, showModal, handleCloseModal }) => {
                         </h2>
                         <button
                             type="button"
-                            className="btn-close"
-                            data-bs-target="#detailModal"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
                             aria-label="Close"
-                            onClick={handleCloseModal}
                         ></button>
                     </div>
                     <div className="modal-body">

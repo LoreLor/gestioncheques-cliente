@@ -57,6 +57,11 @@ const ChecksTable = () => {
 
     // const handleDelete = (id) => {};
 
+     // Handle Modal
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
+
     const columns = [
         {
             name: "Acciones",
@@ -67,6 +72,8 @@ const ChecksTable = () => {
                     <a
                         href="#"
                         className="me-3"
+                        data-bs-toggle="modal"
+                        data-bs-target="#detailModal"
                         onClick={() => handleView(row.id)}
                     >
                         <FontAwesomeIcon icon={faEye} className="iconActions" />
@@ -247,9 +254,9 @@ const ChecksTable = () => {
 
                 {/* Modal Ver Detalle */}
                 <ModalView
-                    id={selectedCheck}
                     showModal={showModal}
-                    handleCloseModal={() => setShowModal(false)}
+                    handleCloseModal={handleCloseModal}
+                    id={selectedCheck}
                 />
             </div>
         </section>
