@@ -1,6 +1,7 @@
 import axios from "axios";
 import URL_API from "../../../server";
 import {
+    ADD_CHECK_ERROR,
     ALL_CHECKS_ERROR,
     ALL_CHECKS_REQUEST,
     ALL_CHECKS_SUCCESS,
@@ -68,4 +69,22 @@ export const deleteCheck = (id) => async(dispatch) =>{
         })
     }
 
+}
+
+export const addCheck = (check) => async(dispatch) => {
+    dispatch({
+        type: ALL_CHECKS_REQUEST,
+    });
+    try {
+        const response = await axios.post(`${URL_API}/agregar`, check)
+        dispatch({
+            type: ALL_CHECKS_SUCCESS,
+            payload: response.data
+        })
+    } catch (error) {
+        dispatch({
+            type: ADD_CHECK_ERROR,
+            payload: error
+        })
+    }
 }

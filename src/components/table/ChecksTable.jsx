@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-//import React from "react";
 import { useState, useRef, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
@@ -24,8 +22,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "./ChecksTable.css";
 import Swal from "sweetalert2";
-
-
 
 const ChecksTable = () => {
     const dispatch = useDispatch();
@@ -65,24 +61,24 @@ const ChecksTable = () => {
     const handleDelete = async (id) => {
         try {
             const result = await Swal.fire({
-                title: '¿Estás seguro?',
-                text: 'Esta acción no se puede deshacer.',
-                icon: 'warning',
+                title: "¿Estás seguro?",
+                text: "Esta acción no se puede deshacer.",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: '#b84b29',
-                cancelButtonColor: '#797070',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar',
+                confirmButtonColor: "#b84b29",
+                cancelButtonColor: "#797070",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
             });
-    
+
             if (result.isConfirmed) {
                 await dispatch(deleteCheck(id));
                 setCheckDel(id);
-    
+
                 Swal.fire({
                     title: "Eliminado!",
                     text: "El cheque ha sido eliminado correctamente",
-                    icon: "success"
+                    icon: "success",
                 });
             }
         } catch (error) {
@@ -93,10 +89,10 @@ const ChecksTable = () => {
     // Cierra el modal
     const handleCloseModal = () => {
         setShowModal(false);
-    }
+    };
 
     useEffect(() => {
-        if(checkDel){
+        if (checkDel) {
             setCheckDel(null);
             dispatch(allChecks());
         }
@@ -129,7 +125,8 @@ const ChecksTable = () => {
                     </a>
                     <a
                         href="#"
-                        className="me-2" onClick={() => handleDelete(row.id)}
+                        className="me-2"
+                        onClick={() => handleDelete(row.id)}
                     >
                         <FontAwesomeIcon
                             icon={faTrash}
@@ -233,7 +230,7 @@ const ChecksTable = () => {
             <div className="container mt-5" ref={print}>
                 <div className="row py-3">
                     {/* Btns Actions */}
-                    <div className="col-md-6 text-start">
+                    <div className="col-md-4 text-start">
                         <DownloadExcel
                             data={inputData}
                             buttonLabel={
@@ -261,8 +258,14 @@ const ChecksTable = () => {
                             <FontAwesomeIcon icon={faPrint} />
                         </button>
                     </div>
+                    <div className="col-md-4 text-center">
+                        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                            Agrega tu Cheque
+                        </button>
+
+                    </div>
                     {/* Input Search */}
-                    <div className="col-md-6 text-end">
+                    <div className="col-md-4 text-end">
                         <label>
                             Buscar por Banco:{" "}
                             <input
