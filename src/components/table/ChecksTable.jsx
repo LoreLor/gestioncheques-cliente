@@ -12,27 +12,33 @@ import {
     faPrint,
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { useReactToPrint } from "react-to-print";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { customStyles } from "./ChecksTableCss";
-import "./ChecksTable.css";
 import { DownloadExcel } from "react-excel-export";
 import { useDispatch, useSelector } from "react-redux";
-import { allChecks } from "../../redux/actions/checks";
+import { allChecks, deleteCheck } from "../../redux/actions/checks";
 import { dateFormat } from "../../utils/dateFormat";
 import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import "./ChecksTable.css";
+import Swal from "sweetalert2";
+
+
 
 const ChecksTable = () => {
     const dispatch = useDispatch();
+
     const checksList = useSelector((state) => state.checks);
     const { checks, loading } = checksList;
+
     const [inputData, setInputData] = useState(checks);
 
     const [showModal, setShowModal] = useState(false);
     const [selectedCheck, setSelectCheck] = useState(null);
+
+    const [checkDel, setCheckDel] = useState(null);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -46,7 +52,7 @@ const ChecksTable = () => {
         setInputData(checks);
     }, [checks]);
 
-    // capturar el id del cheque
+    // captura el id del cheque
     const handleView = (id) => {
         setSelectCheck(id);
         setShowModal(true);
@@ -55,12 +61,46 @@ const ChecksTable = () => {
 
     // const handleEdit = (id) => {};
 
-    // const handleDelete = (id) => {};
+    // Delete Project
+    const handleDelete = async (id) => {
+        try {
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#b84b29',
+                cancelButtonColor: '#797070',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+            });
+    
+            if (result.isConfirmed) {
+                await dispatch(deleteCheck(id));
+                setCheckDel(id);
+    
+                Swal.fire({
+                    title: "Eliminado!",
+                    text: "El cheque ha sido eliminado correctamente",
+                    icon: "success"
+                });
+            }
+        } catch (error) {
+            Swal.fire("Error", "No se pudo eliminar el cheque", "error");
+        }
+    };
 
-     // Handle Modal
+    // Cierra el modal
     const handleCloseModal = () => {
         setShowModal(false);
     }
+
+    useEffect(() => {
+        if(checkDel){
+            setCheckDel(null);
+            dispatch(allChecks());
+        }
+    }, []);
 
     const columns = [
         {
@@ -79,7 +119,7 @@ const ChecksTable = () => {
                         <FontAwesomeIcon icon={faEye} className="iconActions" />
                     </a>
                     <a
-                        href=""
+                        href="#"
                         className="me-3" /*onClick={() => handleEdit(row.id)}*/
                     >
                         <FontAwesomeIcon
@@ -88,8 +128,8 @@ const ChecksTable = () => {
                         />
                     </a>
                     <a
-                        href=""
-                        className="me-2" /* onClick={() => handleDelete(row.id)}*/
+                        href="#"
+                        className="me-2" onClick={() => handleDelete(row.id)}
                     >
                         <FontAwesomeIcon
                             icon={faTrash}
