@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 //import React from "react";
 import { useState, useRef, useEffect } from "react";
 import DataTable from "react-data-table-component";
@@ -11,89 +12,129 @@ import {
     faPrint,
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { useReactToPrint } from "react-to-print";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { customStyles } from "./ChecksTableCss";
-import './ChecksTable.css';
 import { DownloadExcel } from "react-excel-export";
 import { useDispatch, useSelector } from "react-redux";
-import { allChecks } from "../../redux/actions/cheks";
+import { allChecks, deleteCheck } from "../../redux/actions/checks";
 import { dateFormat } from "../../utils/dateFormat";
 import Loader from "../loader/Loader";
+import ModalView from "../modals/ModalView";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import "./ChecksTable.css";
+import Swal from "sweetalert2";
 
 
 
 const ChecksTable = () => {
     const dispatch = useDispatch();
-    const checksList = useSelector(state => state.checks);
+
+    const checksList = useSelector((state) => state.checks);
     const { checks, loading } = checksList;
+
     const [inputData, setInputData] = useState(checks);
 
-    useEffect(() => {
-        dispatch(allChecks())
-    },[]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedCheck, setSelectCheck] = useState(null);
+
+    const [checkDel, setCheckDel] = useState(null);
 
     useEffect(() => {
-        setInputData(checks)
-    },[checks]);
+        const timeout = setTimeout(() => {
+            dispatch(allChecks());
+        }, 2000);
 
-    // const handleView = (id) => {}
+        return () => clearTimeout(timeout);
+    }, []);
+
+    useEffect(() => {
+        setInputData(checks);
+    }, [checks]);
+
+    // captura el id del cheque
+    const handleView = (id) => {
+        setSelectCheck(id);
+        setShowModal(true);
+        console.log("id :>> ", id);
+    };
 
     // const handleEdit = (id) => {};
 
-    // const handleDelete = (id) => {};
+    // Delete Project
+    const handleDelete = async (id) => {
+        try {
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#b84b29',
+                cancelButtonColor: '#797070',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+            });
+    
+            if (result.isConfirmed) {
+                await dispatch(deleteCheck(id));
+                setCheckDel(id);
+    
+                Swal.fire({
+                    title: "Eliminado!",
+                    text: "El cheque ha sido eliminado correctamente",
+                    icon: "success"
+                });
+            }
+        } catch (error) {
+            Swal.fire("Error", "No se pudo eliminar el cheque", "error");
+        }
+    };
 
+    // Cierra el modal
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
 
-    // const data = [
+    useEffect(() => {
+        if(checkDel){
+            setCheckDel(null);
+            dispatch(allChecks());
+        }
+    }, []);
 
-    //     {
-    //         id: 2,
-    //         fechaRecepcion: "2024-04-12",
-    //         fechaCobro: "2025-12-24",
-    //         numeroCheque: "423423",
-    //         banco: "Galicia",
-    //         monto: 50000,
-    //         estado: "cobrado",
-    //         nombreDestino: "Elo2",
-    //         // entregadoPor: "Piruli2",
-    //         // titularCheque: "Pirulo2",
-    //         // cuit: "21-3454232432",
-    //         // codigoDestino: "E2",
-    //         // activo: true,
-    //     },
-    //     {
-    //         id: 3,
-    //         fechaRecepcion: "2024-07-12",
-    //         fechaCobro: "2025-12-24",
-    //         numeroCheque: "423423",
-    //         banco: "Patagonia",
-    //         monto: 50000,
-    //         estado: "pendiente",
-    //         nombreDestino: "Elo3",
-    //         // cuit: "21-3454232432",
-    //         // titularCheque: "Pirulo3",
-    //         // entregadoPor: "Piruli3",
-    //         // codigoDestino: "E3",
-    //         // activo: true,
-    //     },
-    // ];
     const columns = [
         {
             name: "Acciones",
-            grow:2,
+            grow: 2,
             // eslint-disable-next-line no-unused-vars
             cell: (row) => (
                 <div>
-                    <a href="" className="me-3" /* onClick={() => handleView(row.id)}*/>
-                        <FontAwesomeIcon icon={faEye} className="iconActions"/>
+                    <a
+                        href="#"
+                        className="me-3"
+                        data-bs-toggle="modal"
+                        data-bs-target="#detailModal"
+                        onClick={() => handleView(row.id)}
+                    >
+                        <FontAwesomeIcon icon={faEye} className="iconActions" />
                     </a>
-                    <a href="" className="me-3" /*onClick={() => handleEdit(row.id)}*/>
-                        <FontAwesomeIcon icon={faEdit} className="iconActions"/>
+                    <a
+                        href="#"
+                        className="me-3" /*onClick={() => handleEdit(row.id)}*/
+                    >
+                        <FontAwesomeIcon
+                            icon={faEdit}
+                            className="iconActions"
+                        />
                     </a>
-                    <a href="" className="me-2" /* onClick={() => handleDelete(row.id)}*/>
-                        <FontAwesomeIcon icon={faTrash} className="iconActions"/>
+                    <a
+                        href="#"
+                        className="me-2" onClick={() => handleDelete(row.id)}
+                    >
+                        <FontAwesomeIcon
+                            icon={faTrash}
+                            className="iconActions"
+                        />
                     </a>
                 </div>
             ),
@@ -102,23 +143,24 @@ const ChecksTable = () => {
             name: "Fecha Ingreso",
             selector: (row) => dateFormat(row.fechaRecepcion),
             sortable: true,
-            grow:2,
+            grow: 2,
         },
         {
             name: "Fecha Cobro",
             selector: (row) => dateFormat(row.fechaCobro),
             sortable: true,
-            grow:2,
+            grow: 2,
         },
         {
             name: "N° Cheque",
             selector: (row) => row.numeroCheque,
+            grow: 2,
         },
         {
             name: "Banco",
             selector: (row) => row.banco,
             sortable: true,
-            grow:2,
+            grow: 2,
         },
         {
             name: "Monto",
@@ -136,7 +178,9 @@ const ChecksTable = () => {
             cell: (row) => (
                 <div>
                     {row.estado === "pendiente" && (
-                        <span className="badge bg-warning text-dark p-2">Pendiente</span>
+                        <span className="badge bg-warning text-dark p-2">
+                            Pendiente
+                        </span>
                     )}
                     {row.estado === "rechazado" && (
                         <span className="badge bg-danger p-2">Rechazado</span>
@@ -144,7 +188,8 @@ const ChecksTable = () => {
                     {row.estado === "cobrado" && (
                         <span className="badge bg-success p-2">Cobrado</span>
                     )}
-                </div>)
+                </div>
+            ),
         },
     ];
 
@@ -193,13 +238,16 @@ const ChecksTable = () => {
                             data={inputData}
                             buttonLabel={
                                 <div className="btn btn-success">
-                                    <FontAwesomeIcon icon={faFileExcel} className="px-1"/>
+                                    <FontAwesomeIcon
+                                        icon={faFileExcel}
+                                        className="px-1"
+                                    />
                                 </div>
                             }
                             fileName="Libro1"
                             className="export-button  border-0"
                         />
-                        
+
                         <button
                             className="btn btn-danger ms-2"
                             onClick={handleExportPDF}
@@ -227,22 +275,29 @@ const ChecksTable = () => {
                 </div>
 
                 {/* Tabla */}
-                {
-                    loading ? <Loader /> : (
-                        <StyleSheetManager
-                            shouldForwardProp={(prop) => prop !== "sortActive"}
-                        >
-                            <DataTable
-                                columns={columns}
-                                data={inputData}
-                                customStyles={customStyles}
-                                // selectableRows
-                                fixedHeader
-                                pagination
-                            ></DataTable>
-                        </StyleSheetManager>
-                    )
-                }
+                {loading ? (
+                    <Loader />
+                ) : (
+                    <StyleSheetManager
+                        shouldForwardProp={(prop) => prop !== "sortActive"}
+                    >
+                        <DataTable
+                            columns={columns}
+                            data={inputData}
+                            customStyles={customStyles}
+                            // selectableRows
+                            fixedHeader
+                            pagination
+                        ></DataTable>
+                    </StyleSheetManager>
+                )}
+
+                {/* Modal Ver Detalle */}
+                <ModalView
+                    showModal={showModal}
+                    handleCloseModal={handleCloseModal}
+                    id={selectedCheck}
+                />
             </div>
         </section>
     );
