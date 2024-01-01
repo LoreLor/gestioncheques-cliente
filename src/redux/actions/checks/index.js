@@ -2,6 +2,8 @@ import axios from "axios";
 import URL_API from "../../../server";
 import {
     ADD_CHECK_ERROR,
+    ADD_CHECK_REQUEST,
+    ADD_CHECK_SUCCESS,
     ALL_CHECKS_ERROR,
     ALL_CHECKS_REQUEST,
     ALL_CHECKS_SUCCESS,
@@ -54,37 +56,40 @@ export const deleteCheck = (id) => async(dispatch) =>{
     dispatch({
         type: DELETE_CHECK_REQUEST,
         payload: id
-      });
+    });
     try {
+        // eslint-disable-next-line no-unused-vars
         const response = await axios.delete(`${URL_API}/eliminar/${id}`);
-            dispatch({
-                type: DELETE_CHECK_SUCCESS,
-                payload: id,
-            });
+        dispatch({
+            type: DELETE_CHECK_SUCCESS,
+            payload: id,
+        });
         
     } catch (error) {
         dispatch({
             type: DELETE_CHECK_ERROR,
             payload: error
-        })
+        });
     }
 
-}
+};
 
 export const addCheck = (check) => async(dispatch) => {
     dispatch({
-        type: ALL_CHECKS_REQUEST,
+        type: ADD_CHECK_REQUEST,
     });
     try {
-        const response = await axios.post(`${URL_API}/agregar`, check)
+        const response = await axios.post(`${URL_API}/agregar`, check);
         dispatch({
-            type: ALL_CHECKS_SUCCESS,
-            payload: response.data
-        })
+            type: ADD_CHECK_SUCCESS,
+            payload: response
+        });
+        dispatch(allChecks());
+
     } catch (error) {
         dispatch({
             type: ADD_CHECK_ERROR,
             payload: error
-        })
+        });
     }
-}
+};

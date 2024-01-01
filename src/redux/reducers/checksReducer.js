@@ -41,7 +41,8 @@ export const checksListReducer = (state = initialState, action) => {
         case ADD_CHECK_SUCCESS:
             return {
                 ...state,
-                checks: [...state.checks, action.payload]
+                checks: action.payload,
+                loading: false,
             };
 
         case DELETE_CHECK_REQUEST:

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
@@ -5,14 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEdit,
     faEye,
-    faFileExcel,
+    //faFileExcel,
     faFilePdf,
     faPrint,
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useReactToPrint } from "react-to-print";
 import { customStyles } from "./ChecksTableCss";
-import { DownloadExcel } from "react-excel-export";
 import { useDispatch, useSelector } from "react-redux";
 import { allChecks, deleteCheck } from "../../redux/actions/checks";
 import { dateFormat } from "../../utils/dateFormat";
@@ -22,6 +22,10 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "./ChecksTable.css";
 import Swal from "sweetalert2";
+import ModalAdd from "../modals/ModalAdd";
+// import { DownloadTableExcel } from "react-export-table-to-excel";
+// import { DownloadExcel } from "react-excel-export";
+
 
 const ChecksTable = () => {
     const dispatch = useDispatch();
@@ -36,6 +40,7 @@ const ChecksTable = () => {
 
     const [checkDel, setCheckDel] = useState(null);
 
+
     useEffect(() => {
         const timeout = setTimeout(() => {
             dispatch(allChecks());
@@ -45,7 +50,8 @@ const ChecksTable = () => {
     }, []);
 
     useEffect(() => {
-        setInputData(checks);
+        const chec = checks;
+        setInputData(chec);
     }, [checks]);
 
     // captura el id del cheque
@@ -88,6 +94,7 @@ const ChecksTable = () => {
 
     // Cierra el modal
     const handleCloseModal = () => {
+        dispatch(allChecks());
         setShowModal(false);
     };
 
@@ -95,8 +102,9 @@ const ChecksTable = () => {
         if (checkDel) {
             setCheckDel(null);
             dispatch(allChecks());
+            setInputData(checks);
         }
-    }, []);
+    }, [checkDel, checks]);
 
     const columns = [
         {
@@ -190,17 +198,16 @@ const ChecksTable = () => {
         },
     ];
 
-    // manejo de etado search
+    // manejo de estado search
     const handleFilter = (e) => {
         const searchText = e.target.value.toLowerCase();
+        if (!checks) {
+            return;
+        }
         const filterData = checks.filter((row) =>
             row.banco.toLowerCase().includes(searchText)
         );
-        if (filterData) {
-            setInputData(filterData);
-        } else {
-            setInputData(inputData);
-        }
+        setInputData(filterData);
     };
 
     // Función para exportar a PDF
@@ -223,6 +230,7 @@ const ChecksTable = () => {
     const handlePrint = useReactToPrint({
         content: () => print.current,
     });
+    
 
     return (
         <section id="tableCheck" className="pt-5">
@@ -231,19 +239,30 @@ const ChecksTable = () => {
                 <div className="row py-3">
                     {/* Btns Actions */}
                     <div className="col-md-4 text-start">
-                        <DownloadExcel
-                            data={inputData}
-                            buttonLabel={
-                                <div className="btn btn-success">
-                                    <FontAwesomeIcon
-                                        icon={faFileExcel}
-                                        className="px-1"
-                                    />
-                                </div>
-                            }
+                        {/* <DownloadTableExcel
+                            filename="Listado de Cheques"
+                            sheet="cheques"
+                            currentTableRef={tableRef.current}
+                        >
+                            <div className="btn btn-success">
+                                <FontAwesomeIcon
+                                    icon={faFileExcel}
+                                    className="px-1"
+                                />
+                            </div>
+                        </DownloadTableExcel> */}
+
+                        {/* <DownloadExcel
+                            data={checks}
+                            buttonLabel={<div className="btn btn-success">
+                                <FontAwesomeIcon
+                                    icon={faFileExcel}
+                                    className="px-1"
+                                />
+                            </div>}
                             fileName="Libro1"
                             className="export-button  border-0"
-                        />
+                        /> */}
 
                         <button
                             className="btn btn-danger ms-2"
@@ -259,10 +278,14 @@ const ChecksTable = () => {
                         </button>
                     </div>
                     <div className="col-md-4 text-center">
-                        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addModal"
+                        >
                             Agrega tu Cheque
                         </button>
-
                     </div>
                     {/* Input Search */}
                     <div className="col-md-4 text-end">
@@ -284,14 +307,17 @@ const ChecksTable = () => {
                     <StyleSheetManager
                         shouldForwardProp={(prop) => prop !== "sortActive"}
                     >
-                        <DataTable
-                            columns={columns}
-                            data={inputData}
-                            customStyles={customStyles}
-                            // selectableRows
-                            fixedHeader
-                            pagination
-                        ></DataTable>
+                        {
+                            Array.isArray(checks) && checks.length > 0 ?
+                                <DataTable
+                                    columns={columns}
+                                    data={inputData}
+                                    customStyles={customStyles}
+                                    fixedHeader
+                                    pagination
+                                ></DataTable>
+                                : <p>No existen cheques registrados</p>
+                        }
                     </StyleSheetManager>
                 )}
 
@@ -300,6 +326,10 @@ const ChecksTable = () => {
                     showModal={showModal}
                     handleCloseModal={handleCloseModal}
                     id={selectedCheck}
+                />
+                <ModalAdd 
+                    showModal={showModal}
+                    handleCloseModal={handleCloseModal}
                 />
             </div>
         </section>
