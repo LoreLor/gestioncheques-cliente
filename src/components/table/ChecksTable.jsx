@@ -14,7 +14,7 @@ import {
 import { useReactToPrint } from "react-to-print";
 import { customStyles } from "./ChecksTableCss";
 import { useDispatch, useSelector } from "react-redux";
-import { allChecks, deleteCheck } from "../../redux/actions/checks";
+import { allChecks, cleanDetail, deleteCheck } from "../../redux/actions/checks";
 import { dateFormat } from "../../utils/dateFormat";
 import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
@@ -35,7 +35,6 @@ const ChecksTable = () => {
 
     const [inputData, setInputData] = useState(checks);
 
-    const [showModal, setShowModal] = useState(false);
     const [selectedCheck, setSelectCheck] = useState(null);
 
     const [checkDel, setCheckDel] = useState(null);
@@ -57,13 +56,16 @@ const ChecksTable = () => {
     // captura el id del cheque
     const handleView = (id) => {
         setSelectCheck(id);
-        setShowModal(true);
         console.log("id :>> ", id);
     };
 
-    // const handleEdit = (id) => {};
+    // Actualiza cheque
+    const handleEditCheck = (id) => {
+        setSelectCheck(id);
+        console.log("id :>> ", id);
+    };
 
-    // Delete Project
+    // Elimina cheque
     const handleDelete = async (id) => {
         try {
             const result = await Swal.fire({
@@ -92,11 +94,13 @@ const ChecksTable = () => {
         }
     };
 
-    // Cierra el modal
-    const handleCloseModal = () => {
-        dispatch(allChecks());
-        setShowModal(false);
+    // Cierra modal
+    const handleCloseModal = async() => {
+        dispatch(cleanDetail());  
+        setSelectCheck(null);
     };
+    
+
 
     useEffect(() => {
         if (checkDel) {
@@ -124,7 +128,10 @@ const ChecksTable = () => {
                     </a>
                     <a
                         href="#"
-                        className="me-3" /*onClick={() => handleEdit(row.id)}*/
+                        className="me-3" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#addModal"
+                        onClick={() => handleEditCheck(row.id)}
                     >
                         <FontAwesomeIcon
                             icon={faEdit}
@@ -198,7 +205,7 @@ const ChecksTable = () => {
         },
     ];
 
-    // manejo de estado search
+    // Manejo de estado search
     const handleFilter = (e) => {
         const searchText = e.target.value.toLowerCase();
         if (!checks) {
@@ -225,7 +232,7 @@ const ChecksTable = () => {
         doc.save("table.pdf");
     };
 
-    // funcion para mandar a impresion
+    // Funcion para mandar a impresion
     const print = useRef();
     const handlePrint = useReactToPrint({
         content: () => print.current,
@@ -264,12 +271,14 @@ const ChecksTable = () => {
                             className="export-button  border-0"
                         /> */}
 
+                        {/* Boton Excel */}
                         <button
                             className="btn btn-danger ms-2"
                             onClick={handleExportPDF}
                         >
                             <FontAwesomeIcon icon={faFilePdf} />
                         </button>
+                        {/* Boton Imprimir */}
                         <button
                             className="btn btn-secondary ms-2"
                             onClick={handlePrint}
@@ -277,6 +286,7 @@ const ChecksTable = () => {
                             <FontAwesomeIcon icon={faPrint} />
                         </button>
                     </div>
+                    {/* Boton agregar Cheque */}
                     <div className="col-md-4 text-center">
                         <button
                             type="button"
@@ -284,7 +294,7 @@ const ChecksTable = () => {
                             data-bs-toggle="modal"
                             data-bs-target="#addModal"
                         >
-                            Agrega tu Cheque
+                            Agregar Cheque
                         </button>
                     </div>
                     {/* Input Search */}
@@ -323,13 +333,12 @@ const ChecksTable = () => {
 
                 {/* Modal Ver Detalle */}
                 <ModalView
-                    showModal={showModal}
                     handleCloseModal={handleCloseModal}
                     id={selectedCheck}
                 />
                 <ModalAdd 
-                    showModal={showModal}
                     handleCloseModal={handleCloseModal}
+                    id={selectedCheck}
                 />
             </div>
         </section>

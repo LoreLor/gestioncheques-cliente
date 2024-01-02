@@ -2,6 +2,7 @@ import {
     CHECK_DETAIL_ERROR,
     CHECK_DETAIL_REQUEST,
     CHECK_DETAIL_SUCCESS,
+    CLEAN_DETAIL,
     DELETE_CHECK_ERROR,
     DELETE_CHECK_SUCCESS,
 } from "../actions/checks/actionsType";
@@ -37,6 +38,11 @@ export const detailCheckReducer = (state = initialState, action) => {
         return {
             ...state,
             error: action.payload
+        };
+    case CLEAN_DETAIL:
+        return {
+            ...state,
+            detail: {},
         };
     default:
         return state;

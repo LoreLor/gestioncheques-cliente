@@ -1,10 +1,18 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 
 import validations from "../../utils/validations";
 import { useForm } from "../../hooks/useForm";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { cleanDetail, detailCheck } from "../../redux/actions/checks";
 
 
-const ModalAdd = () => {
+
+const ModalAdd = ({id}) => {
+    const dispatch = useDispatch();
+    const checkDetail = useSelector((state) => state.detailCheck);
+    const { detail } = checkDetail;
     const initialForm = {
         fechaRecepcion: "",
         fechaCobro: "",
@@ -24,7 +32,18 @@ const ModalAdd = () => {
         errors,
         handleChange,
         handleSubmit,
-    } = useForm(initialForm, validations);
+    } = useForm(initialForm, validations, id);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(detailCheck(id));
+        }
+    }, [dispatch, id]);
+
+    const handleCloseModal = () => {
+        dispatch(cleanDetail());  
+    };
+
 
 
     return (
@@ -38,17 +57,18 @@ const ModalAdd = () => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2 className="modal-title fs-3">Agrega tu Cheque</h2>
+                        <h2 className="modal-title fs-3">{detail ? "Editar Cheque" : "Agregar Cheque"}</h2>
                         <button
                             type="button"
                             className="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
+                            onClick={handleCloseModal}
                         ></button>
                     </div>
 
                     <div className="modal-body">
-                        <form className="row g-3 needs-validations">
+                        <form className="row g-3 needs-validations" onSubmit={handleSubmit}>
                             <div className="input-group mb-2">
                                 {/* Fecha de Recepcion */}
                                 <div className="col-6 pe-3">
@@ -59,7 +79,7 @@ const ModalAdd = () => {
                                         Fecha de Recepción:
                                     </label>
                                     <input
-                                        type="date"
+                                        type={detail ? "text" : "date"}
                                         id="fechaRecepcion"
                                         name="fechaRecepcion"
                                         value={formData.fechaRecepcion}
@@ -86,7 +106,7 @@ const ModalAdd = () => {
                                         Fecha de Cobro:
                                     </label>
                                     <input
-                                        type="date"
+                                        type={detail? "text" : "date"}
                                         id="fechaCobro"
                                         name="fechaCobro"
                                         value={formData.fechaCobro}
@@ -397,9 +417,8 @@ const ModalAdd = () => {
                             </div>
                             <div className="d-flex justify-content-end align-items-center mb-5">
                                 <button
-                                    type="button"
+                                    type="submit"
                                     className="btn btn-primary m-2"
-                                    onClick={handleSubmit}
                                 >
                                     Guardar
                                 </button>
@@ -407,6 +426,7 @@ const ModalAdd = () => {
                                     type="button"
                                     className="btn btn-secondary m-2"
                                     data-bs-dismiss="modal"
+                                    onClick={handleCloseModal}
                                 >
                                     Cerrar
                                 </button>

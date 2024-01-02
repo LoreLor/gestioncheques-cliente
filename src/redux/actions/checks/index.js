@@ -10,10 +10,15 @@ import {
     CHECK_DETAIL_ERROR,
     CHECK_DETAIL_REQUEST,
     CHECK_DETAIL_SUCCESS,
+    CLEAN_DETAIL,
     DELETE_CHECK_ERROR,
     DELETE_CHECK_REQUEST,
     DELETE_CHECK_SUCCESS,
+    UPDATE_CHECK_ERROR,
+    UPDATE_CHECK_REQUEST,
+    UPDATE_CHECK_SUCCESS,
 } from "./actionsType";
+import { dateFormat } from "../../../utils/dateFormat";
 
 export const allChecks = () => async (dispatch) => {
     dispatch({
@@ -40,9 +45,18 @@ export const detailCheck = (id) => async (dispatch) => {
     });
     try {
         const response = await axios.get(`${URL_API}/listar/${id}`);
+        const formattedData = {
+            ...response.data,
+            fechaRecepcion: response.data.fechaRecepcion
+                ? dateFormat(response.data.fechaRecepcion)
+                : null,
+            fechaCobro: response.data.fechaCobro
+                ? dateFormat(response.data.fechaCobro)
+                : null,
+        };
         dispatch({
             type: CHECK_DETAIL_SUCCESS,
-            payload: response.data,
+            payload: formattedData,
         });
     } catch (error) {
         dispatch({
@@ -82,7 +96,7 @@ export const addCheck = (check) => async(dispatch) => {
         const response = await axios.post(`${URL_API}/agregar`, check);
         dispatch({
             type: ADD_CHECK_SUCCESS,
-            payload: response
+            payload: response.data
         });
         dispatch(allChecks());
 
@@ -92,4 +106,29 @@ export const addCheck = (check) => async(dispatch) => {
             payload: error
         });
     }
+};
+
+export const updateCheck = (id, check) => async(dispatch) => {
+    dispatch({
+        type: UPDATE_CHECK_REQUEST,
+        payload: id
+    });
+    try {
+        const response = await axios.put(`${URL_API}/modificar/${id}`, check);
+        dispatch({
+            type: UPDATE_CHECK_SUCCESS,
+            payload: response.data
+        });    
+    } catch (error) {
+        dispatch({
+            type: UPDATE_CHECK_ERROR,
+            payload: error,
+        });
+    }
+};
+
+export const cleanDetail = () => (dispatch) =>{
+    dispatch({
+        type: CLEAN_DETAIL
+    });
 };
