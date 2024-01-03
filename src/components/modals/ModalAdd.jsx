@@ -31,10 +31,10 @@ const ModalAdd = ({id}) => {
     const {
         formData,
         errors,
-        isEditing,
         handleChange,
         handleSubmit,
     } = useForm(initialForm, validations, id);
+    
     
 
     useEffect(() => {
@@ -60,7 +60,7 @@ const ModalAdd = ({id}) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2 className="modal-title fs-3">{isEditing === true? "Edita el Cheque" : "Registra el Cheque"}</h2>
+                        <h2 className="modal-title fs-3">Registra o Edita tu Cheque</h2>
                         <button
                             type="button"
                             className="btn-close"

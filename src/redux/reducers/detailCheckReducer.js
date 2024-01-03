@@ -23,7 +23,6 @@ export const detailCheckReducer = (state = initialState, action) => {
         return {
             loading: false,
             detail: action.payload,
-            isEditing: action.payload ? true : false,
         };
     case CHECK_DETAIL_ERROR:
         return {

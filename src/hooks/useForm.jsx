@@ -9,15 +9,19 @@ export const useForm = (initialForm, validations, id) => {
     const [formData, setFormData] = useState(initialForm);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [operationType, setOperationType] = useState(id ? "edit" : "register");
 
     const checkDetail = useSelector(state => state.detailCheck);
-    const { detail, isEditing } = checkDetail;
+    const { detail } = checkDetail;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (id) {
                     await dispatch(detailCheck(id));
+                    setOperationType("edit");
+                } else {
+                    setOperationType("register");
                 }
             } catch (error) {
                 console.error(error);
@@ -28,7 +32,9 @@ export const useForm = (initialForm, validations, id) => {
     }, [dispatch, id]);
 
     useEffect(() => {
-        if (detail) {
+        if (!detail) {
+            setFormData(initialForm);
+        } else {
             setFormData({
                 fechaRecepcion: detail?.fechaRecepcion || "",
                 fechaCobro: detail?.fechaCobro || "",
@@ -42,11 +48,6 @@ export const useForm = (initialForm, validations, id) => {
                 nombreDestino: detail?.nombreDestino || "",
                 codigoDestino: detail?.codigoDestino || "",
             });
-         
-            console.log("Setting isEditing to true");
-        } else {
-            setFormData(initialForm);
-            console.log("Setting isEditing to false");
         }
     }, [detail, id]);
     
@@ -118,7 +119,6 @@ export const useForm = (initialForm, validations, id) => {
         setFormData,
         errors,
         loading,
-        isEditing,
         handleChange,
         handleSubmit,
     };

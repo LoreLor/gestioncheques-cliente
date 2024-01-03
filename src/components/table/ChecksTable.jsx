@@ -337,8 +337,8 @@ const ChecksTable = () => {
                     id={selectedCheck}
                 />
                 <ModalAdd 
-                    handleCloseModal={handleCloseModal}
                     id={selectedCheck}
+                    handleCloseModal={handleCloseModal}
                 />
             </div>
         </section>
