@@ -81,7 +81,7 @@ const ChecksTable = () => {
 
             if (result.isConfirmed) {
                 await dispatch(deleteCheck(id));
-                setCheckDel(id);
+                setCheckDel(null);
 
                 Swal.fire({
                     title: "Eliminado!",

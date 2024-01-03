@@ -4,7 +4,7 @@
 import validations from "../../utils/validations";
 import { useForm } from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cleanDetail, detailCheck } from "../../redux/actions/checks";
 
 
@@ -13,6 +13,7 @@ const ModalAdd = ({id}) => {
     const dispatch = useDispatch();
     const checkDetail = useSelector((state) => state.detailCheck);
     const { detail } = checkDetail;
+
     const initialForm = {
         fechaRecepcion: "",
         fechaCobro: "",
@@ -30,9 +31,11 @@ const ModalAdd = ({id}) => {
     const {
         formData,
         errors,
+        isEditing,
         handleChange,
         handleSubmit,
     } = useForm(initialForm, validations, id);
+    
 
     useEffect(() => {
         if (id) {
@@ -57,7 +60,7 @@ const ModalAdd = ({id}) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2 className="modal-title fs-3">{detail ? "Editar Cheque" : "Agregar Cheque"}</h2>
+                        <h2 className="modal-title fs-3">{isEditing === true? "Edita el Cheque" : "Registra el Cheque"}</h2>
                         <button
                             type="button"
                             className="btn-close"
@@ -362,6 +365,7 @@ const ModalAdd = ({id}) => {
                                         name="estado"
                                         id="pendiente"
                                         value="pendiente"
+                                        checked={formData.estado === "pendiente"}
                                         onChange={handleChange}
                                     />
                                     <label
@@ -379,6 +383,7 @@ const ModalAdd = ({id}) => {
                                         name="estado"
                                         id="cobrado"
                                         value="cobrado"
+                                        checked={formData.estado === "cobrado"}
                                         onChange={handleChange}
                                     />
                                     <label
@@ -396,6 +401,7 @@ const ModalAdd = ({id}) => {
                                         name="estado"
                                         id="rechazado"
                                         value="rechazado"
+                                        checked={formData.estado === "rechazado"}
                                         onChange={handleChange}
                                     />
                                     <label

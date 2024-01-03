@@ -11,7 +11,7 @@ export const useForm = (initialForm, validations, id) => {
     const [loading, setLoading] = useState(false);
 
     const checkDetail = useSelector(state => state.detailCheck);
-    const { detail } = checkDetail;
+    const { detail, isEditing } = checkDetail;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,14 +38,17 @@ export const useForm = (initialForm, validations, id) => {
                 monto: detail?.monto || 0,
                 titularCheque: detail?.titularCheque || "",
                 cuit: detail?.cuit || "",
-                estado: detail?.estado || null,
+                estado: detail?.estado || "",
                 nombreDestino: detail?.nombreDestino || "",
                 codigoDestino: detail?.codigoDestino || "",
             });
+         
+            console.log("Setting isEditing to true");
         } else {
             setFormData(initialForm);
+            console.log("Setting isEditing to false");
         }
-    }, [detail]);
+    }, [detail, id]);
     
 
     const handleChange = (e) => {
@@ -115,6 +118,7 @@ export const useForm = (initialForm, validations, id) => {
         setFormData,
         errors,
         loading,
+        isEditing,
         handleChange,
         handleSubmit,
     };
