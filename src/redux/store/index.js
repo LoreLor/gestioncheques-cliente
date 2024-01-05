@@ -1,10 +1,10 @@
-import { legacy_createStore as createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from '@redux-devtools/extension';
+import { legacy_createStore as createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "@redux-devtools/extension";
 
-import  combineReducers  from '../reducers';
-import { thunk } from 'redux-thunk';
+import  combineReducers  from "../reducers";
+import { thunk } from "redux-thunk";
 
-const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
+const composedEnhancer = composeWithDevTools(applyMiddleware(thunk));
 
 const store = createStore(
     combineReducers,

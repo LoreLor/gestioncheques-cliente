@@ -1,5 +1,5 @@
-import axios from "axios";
-import URL_API from "../../../server";
+import axios from "../../../server/axiosConfig";
+//import URL_API from "../../../server";
 import {
     ADD_CHECK_ERROR,
     ADD_CHECK_REQUEST,
@@ -25,7 +25,7 @@ export const allChecks = () => async (dispatch) => {
         type: ALL_CHECKS_REQUEST,
     });
     try {
-        const response = await axios.get(`${URL_API}/listaractivos`);
+        const response = await axios.get("/listaractivos");
         dispatch({
             type: ALL_CHECKS_SUCCESS,
             payload: response.data,
@@ -44,7 +44,7 @@ export const detailCheck = (id) => async (dispatch) => {
         payload: id,
     });
     try {
-        const response = await axios.get(`${URL_API}/listar/${id}`);
+        const response = await axios.get(`/listar/${id}`);
         const formattedData = {
             ...response.data,
             fechaRecepcion: response.data.fechaRecepcion
@@ -73,7 +73,7 @@ export const deleteCheck = (id) => async(dispatch) =>{
     });
     try {
         // eslint-disable-next-line no-unused-vars
-        const response = await axios.delete(`${URL_API}/eliminar/${id}`);
+        const response = await axios.delete(`/eliminar/${id}`);
         dispatch({
             type: DELETE_CHECK_SUCCESS,
             payload: id,
@@ -93,7 +93,7 @@ export const addCheck = (check) => async(dispatch) => {
         type: ADD_CHECK_REQUEST,
     });
     try {
-        const response = await axios.post(`${URL_API}/agregar`, check);
+        const response = await axios.post("/agregar", check);
         dispatch({
             type: ADD_CHECK_SUCCESS,
             payload: response.data
@@ -114,7 +114,9 @@ export const updateCheck = (id, check) => async(dispatch) => {
         payload: id
     });
     try {
-        const response = await axios.put(`${URL_API}/modificar/${id}`, check);
+        const response = await axios.put(`/modificar/${id}`, check);
+        console.log("este es el id : "+id);
+        console.log("este es el cheque " + check);
         dispatch({
             type: UPDATE_CHECK_SUCCESS,
             payload: response.data
