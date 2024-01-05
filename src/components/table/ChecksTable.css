@@ -1,5 +1,6 @@
 :root{
-    --transition: all 0.3s ease-out; 
+    --transition: all 0.3s ease-in-out; 
+    --purple-1: #081A51;
     --gray-1: #71827d;
     --gray-2: #313030;
     --gray-3: #f5eeee;
@@ -10,7 +11,7 @@
     --blue-3: #1199c2;
     --blue-4: #0954e0;
     --blue-5: #50b5f83d;
-    --red-1: #f50f0f;
+    --red-1: rgb(248, 43, 6);
     --green-1: #04c20e;
 }
 
@@ -33,25 +34,26 @@
 }
 
 .rdt_TableRow:hover {
-    background-color: var(--blue-5); /* Cambia el color de fondo al pasar el ratón */
-  }
+    background-color: var(--blue-5); 
+}
 
 /* Clases Normales */
 button {
-    border:none;
+    border: none;
 }
+
 
 .iconActions{
     color: var(--gray-1);
     border: 1px solid var(--gray-4);
     border-radius: 5px;
     padding: 0.25rem 0.2rem;
-    transition: var(--transition);
+    transition: var(--transition) !important;
 }
 
 .iconActions:hover{
     color: var(--cyan-1);
-    background-color: var(--gray-2);
+    background-color: var(--purple-1);
     transform: scale(1.2);
 }
 
@@ -78,11 +80,31 @@ button {
     border: 1px solid var(--blue-3) !important;
     background-color: var(--blue-3) !important;
     color: white !important;
+    transition: var(--transition) !important;
+}
+
+.btn-agregar:hover{
+    border: 1px solid var(--purple-1) !important;
+    background-color: var(--purple-1) !important;
+    color: var(--cyan-1) !important;
+    transform: scale(0.95);
+}
+
+.btn-pdf, .btn-print{
+    color: var(--gray-3) !important;
+    background-color: var(--purple-1) !important;
+    transition: var(--transition) !important;
+}
+
+.btn-pdf:hover, .btn-print:hover{
+    color: var(--cyan-1) !important;
+    background-color: var(--blue-1) !important;
+    transform: scale(0.93);
 }
 
 .input-search{
     width: 20rem !important;
-    height: 2.8rem;
+    height: 2.3rem;
     border: 0.02rem solid var(--gray-4) !important;
     border-radius: 5px !important;
     border-bottom: 2px solid var(--blue-1);
@@ -102,10 +124,15 @@ button {
     opacity: .75;
 }
 
+.input-search:focus {
+    outline: none;
+}
+
 #basic-addon1 {
-    background-color: var(--gray-1);
+    background-color: var(--purple-1);
 }
 
 #basic-addon1 .icon-search{
-    color: var(--cyan-1);
+    color: var(--gray-3);
 }
+
