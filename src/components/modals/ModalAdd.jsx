@@ -31,6 +31,7 @@ const ModalAdd = ({id}) => {
     const {
         formData,
         errors,
+        setFormData,
         handleChange,
         handleSubmit,
     } = useForm(initialForm, validations, id);
@@ -40,12 +41,24 @@ const ModalAdd = ({id}) => {
     useEffect(() => {
         if (id) {
             dispatch(detailCheck(id));
+            setFormData(detail);
         }
-    }, [dispatch, id]);
+    }, []);
 
     const handleCloseModal = () => {
         dispatch(cleanDetail());  
     };
+
+    const [editing, setEditing] = useState(false);
+
+
+    useEffect(() => {
+        if (formData.fechaCobro || formData.fechaRecepcion) {
+            setEditing(true);
+        } else {
+            setEditing(false);
+        }
+    }, [formData.fechaCobro, formData.fechaRecepcion]);
 
 
 
@@ -60,7 +73,7 @@ const ModalAdd = ({id}) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2 className="modal-title fs-3">Registra o Edita tu Cheque</h2>
+                        <h2 className="modal-title fs-3">{editing? "Edita el Cheque" : "Registra el Cheque"}</h2>
                         <button
                             type="button"
                             className="btn-close"
@@ -82,7 +95,7 @@ const ModalAdd = ({id}) => {
                                         Fecha de Recepción:
                                     </label>
                                     <input
-                                        type={detail ? "text" : "date"}
+                                        type={editing? "text" : "date"}
                                         id="fechaRecepcion"
                                         name="fechaRecepcion"
                                         value={formData.fechaRecepcion}
@@ -109,7 +122,7 @@ const ModalAdd = ({id}) => {
                                         Fecha de Cobro:
                                     </label>
                                     <input
-                                        type={detail? "text" : "date"}
+                                        type={editing? "text" : "date"}
                                         id="fechaCobro"
                                         name="fechaCobro"
                                         value={formData.fechaCobro}

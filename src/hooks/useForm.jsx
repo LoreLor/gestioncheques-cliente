@@ -9,7 +9,6 @@ export const useForm = (initialForm, validations, id) => {
     const [formData, setFormData] = useState(initialForm);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-    const [operationType, setOperationType] = useState(id ? "edit" : "register");
 
     const checkDetail = useSelector(state => state.detailCheck);
     const { detail } = checkDetail;
@@ -19,9 +18,6 @@ export const useForm = (initialForm, validations, id) => {
             try {
                 if (id) {
                     await dispatch(detailCheck(id));
-                    setOperationType("edit");
-                } else {
-                    setOperationType("register");
                 }
             } catch (error) {
                 console.error(error);
@@ -29,7 +25,7 @@ export const useForm = (initialForm, validations, id) => {
         };
 
         fetchData();
-    }, [dispatch, id]);
+    }, []);
 
     useEffect(() => {
         if (!detail) {
@@ -48,6 +44,7 @@ export const useForm = (initialForm, validations, id) => {
                 nombreDestino: detail?.nombreDestino || "",
                 codigoDestino: detail?.codigoDestino || "",
             });
+            
         }
     }, [detail, id]);
     
@@ -74,6 +71,7 @@ export const useForm = (initialForm, validations, id) => {
 
             try {
                 if (detail) {
+                    
                     await dispatch(updateCheck(formData));
                     Swal.fire({
                         icon: "success",
