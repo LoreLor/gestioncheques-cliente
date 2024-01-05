@@ -8,13 +8,18 @@ import {
     faEye,
     //faFileExcel,
     faFilePdf,
+    faMagnifyingGlass,
     faPrint,
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useReactToPrint } from "react-to-print";
 import { customStyles } from "./ChecksTableCss";
 import { useDispatch, useSelector } from "react-redux";
-import { allChecks, cleanDetail, deleteCheck } from "../../redux/actions/checks";
+import {
+    allChecks,
+    cleanDetail,
+    deleteCheck,
+} from "../../redux/actions/checks";
 import { dateFormat } from "../../utils/dateFormat";
 import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
@@ -26,7 +31,6 @@ import ModalAdd from "../modals/ModalAdd";
 // import { DownloadTableExcel } from "react-export-table-to-excel";
 // import { DownloadExcel } from "react-excel-export";
 
-
 const ChecksTable = () => {
     const dispatch = useDispatch();
 
@@ -34,11 +38,8 @@ const ChecksTable = () => {
     const { checks, loading } = checksList;
 
     const [inputData, setInputData] = useState(checks);
-
     const [selectedCheck, setSelectCheck] = useState(null);
-
     const [checkDel, setCheckDel] = useState(null);
-
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -62,7 +63,7 @@ const ChecksTable = () => {
     // Actualiza cheque
     const handleEditCheck = (id) => {
         setSelectCheck(id);
-        console.log("id :>> ", id);
+        // console.log("id :>> ", id);
     };
 
     // Elimina cheque
@@ -95,12 +96,10 @@ const ChecksTable = () => {
     };
 
     // Cierra modal
-    const handleCloseModal = async() => {
-        dispatch(cleanDetail());  
+    const handleCloseModal = async () => {
+        dispatch(cleanDetail());
         setSelectCheck(null);
     };
-    
-
 
     useEffect(() => {
         if (checkDel) {
@@ -110,10 +109,66 @@ const ChecksTable = () => {
         }
     }, [checkDel, checks]);
 
+    // Chang text span of table
+
     const columns = [
         {
-            name: "Acciones",
+            name: "Fecha Ingreso",
+            selector: (row) => dateFormat(row.fechaRecepcion),
             grow: 2,
+        },
+        {
+            name: "Fecha Cobro",
+            selector: (row) => dateFormat(row.fechaCobro),
+            grow: 2,
+        },
+        {
+            name: "N° Cheque",
+            selector: (row) => row.numeroCheque,
+            grow: 2,
+        },
+        {
+            name: "Banco",
+            selector: (row) => row.banco,
+            sortable: true,
+            grow: 2,
+        },
+        {
+            name: "Monto",
+            selector: (row) => row.monto,
+            sortable: true,
+            grow: 2,
+        },
+        {
+            name: "Destino",
+            selector: (row) => row.nombreDestino,
+            grow: 2,
+        },
+        {
+            name: "Estado",
+            selector: (row) => row.estado,
+            cell: (row) => (
+                <div>
+                    {row.estado === "pendiente" && (
+                        <span className="badge bg-pendiente p-2">
+                            A cobrar
+                        </span>
+                    )}
+                    {row.estado === "rechazado" && (
+                        <span className="badge bg-rechazado p-2">
+                            Rechazado
+                        </span>
+                    )}
+                    {row.estado === "cobrado" && (
+                        <span className="badge bg-cobrado p-2">Cobrado</span>
+                    )}
+                </div>
+            ),
+            grow: 1,
+        },
+        {
+            name: "Acciones",
+            grow: 3,
             // eslint-disable-next-line no-unused-vars
             cell: (row) => (
                 <div>
@@ -128,7 +183,7 @@ const ChecksTable = () => {
                     </a>
                     <a
                         href="#"
-                        className="me-3" 
+                        className="me-3"
                         data-bs-toggle="modal"
                         data-bs-target="#addModal"
                         onClick={() => handleEditCheck(row.id)}
@@ -151,58 +206,6 @@ const ChecksTable = () => {
                 </div>
             ),
         },
-        {
-            name: "Fecha Ingreso",
-            selector: (row) => dateFormat(row.fechaRecepcion),
-            sortable: true,
-            grow: 2,
-        },
-        {
-            name: "Fecha Cobro",
-            selector: (row) => dateFormat(row.fechaCobro),
-            sortable: true,
-            grow: 2,
-        },
-        {
-            name: "N° Cheque",
-            selector: (row) => row.numeroCheque,
-            grow: 2,
-        },
-        {
-            name: "Banco",
-            selector: (row) => row.banco,
-            sortable: true,
-            grow: 2,
-        },
-        {
-            name: "Monto",
-            selector: (row) => row.monto,
-            sortable: true,
-        },
-        {
-            name: "Destino",
-            selector: (row) => row.nombreDestino,
-            sortable: true,
-        },
-        {
-            name: "Estado",
-            selector: (row) => row.estado,
-            cell: (row) => (
-                <div>
-                    {row.estado === "pendiente" && (
-                        <span className="badge bg-warning text-dark p-2">
-                            Pendiente
-                        </span>
-                    )}
-                    {row.estado === "rechazado" && (
-                        <span className="badge bg-danger p-2">Rechazado</span>
-                    )}
-                    {row.estado === "cobrado" && (
-                        <span className="badge bg-success p-2">Cobrado</span>
-                    )}
-                </div>
-            ),
-        },
     ];
 
     // Manejo de estado search
@@ -211,9 +214,21 @@ const ChecksTable = () => {
         if (!checks) {
             return;
         }
-        const filterData = checks.filter((row) =>
-            row.banco.toLowerCase().includes(searchText)
-        );
+        const filterData = checks.filter((row) => {
+            const fieldsToSearch = ["banco", "estado", "monto"];
+            return fieldsToSearch.some((field) => {
+                const fieldValue = row[field];
+
+                if (typeof fieldValue === "string") {
+                    return fieldValue.toLowerCase().includes(searchText);
+                } else if (typeof fieldValue === "number") {
+                    const fieldValueAsString = String(fieldValue).toLowerCase();
+                    return fieldValueAsString.includes(searchText);
+                }
+                return false;
+            });
+        });
+
         setInputData(filterData);
     };
 
@@ -237,11 +252,10 @@ const ChecksTable = () => {
     const handlePrint = useReactToPrint({
         content: () => print.current,
     });
-    
 
     return (
         <section id="tableCheck" className="pt-5">
-            <h2 className="text-center">Listado de Cheques</h2>
+            <h2 className="text-center">Cheques</h2>
             <div className="container mt-5" ref={print}>
                 <div className="row py-3">
                     {/* Btns Actions */}
@@ -273,40 +287,48 @@ const ChecksTable = () => {
 
                         {/* Boton Excel */}
                         <button
-                            className="btn btn-danger ms-2"
+                            className="btn btn-pdf ms-2"
                             onClick={handleExportPDF}
                         >
                             <FontAwesomeIcon icon={faFilePdf} />
                         </button>
                         {/* Boton Imprimir */}
                         <button
-                            className="btn btn-secondary ms-2"
+                            className="btn btn-print ms-2"
                             onClick={handlePrint}
                         >
                             <FontAwesomeIcon icon={faPrint} />
                         </button>
-                    </div>
-                    {/* Boton agregar Cheque */}
-                    <div className="col-md-4 text-center">
+                        {/* Boton agregar Cheque */}
                         <button
                             type="button"
-                            className="btn btn-primary"
+                            className="btn btn-agregar ms-2"
                             data-bs-toggle="modal"
                             data-bs-target="#addModal"
                         >
                             Agregar Cheque
                         </button>
                     </div>
+
                     {/* Input Search */}
-                    <div className="col-md-4 text-end">
-                        <label>
-                            Buscar por Banco:{" "}
+                    <div className="col-md-8">
+                        <div className="input-group mb-3  justify-content-end">
+                            <span
+                                className="input-group-text"
+                                id="basic-addon1"
+                            >
+                                <FontAwesomeIcon icon={faMagnifyingGlass} className="icon-search"/>
+                            </span>
                             <input
                                 type="text"
                                 onChange={handleFilter}
                                 name="search"
+                                className="input-search ps-2"
+                                placeholder="por monto, banco o titular..."
+                                aria-label="Searcher..." 
+                                aria-describedby="basic-addon1"
                             />
-                        </label>
+                        </div>
                     </div>
                 </div>
 
@@ -314,21 +336,26 @@ const ChecksTable = () => {
                 {loading ? (
                     <Loader />
                 ) : (
-                    <StyleSheetManager
-                        shouldForwardProp={(prop) => prop !== "sortActive"}
-                    >
-                        {
-                            Array.isArray(checks) && checks.length > 0 ?
+                    <div className="mb-5">
+                        <StyleSheetManager
+                            shouldForwardProp={(prop) => prop !== "sortActive"}
+                        >
+                            {Array.isArray(checks) && checks.length > 0 ? (
                                 <DataTable
                                     columns={columns}
                                     data={inputData}
                                     customStyles={customStyles}
                                     fixedHeader
                                     pagination
+                                    paginationComponentOptions={{
+                                        rowsPerPageText: "Filas por página",
+                                    }}
                                 ></DataTable>
-                                : <p>No existen cheques registrados</p>
-                        }
-                    </StyleSheetManager>
+                            ) : (
+                                <p>No existen cheques registrados</p>
+                            )}
+                        </StyleSheetManager>
+                    </div>
                 )}
 
                 {/* Modal Ver Detalle */}
@@ -336,7 +363,7 @@ const ChecksTable = () => {
                     handleCloseModal={handleCloseModal}
                     id={selectedCheck}
                 />
-                <ModalAdd 
+                <ModalAdd
                     id={selectedCheck}
                     handleCloseModal={handleCloseModal}
                 />

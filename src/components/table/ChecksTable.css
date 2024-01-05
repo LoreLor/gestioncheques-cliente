@@ -1,20 +1,138 @@
+:root{
+    --transition: all 0.3s ease-in-out; 
+    --purple-1: #081A51;
+    --gray-1: #71827d;
+    --gray-2: #313030;
+    --gray-3: #f5eeee;
+    --gray-4: #dfd2d2;
+    --cyan-1: #08f3f3e3;
+    --blue-1: #03122ef8;
+    --blue-2: #1199c2af;
+    --blue-3: #1199c2;
+    --blue-4: #0954e0;
+    --blue-5: #50b5f83d;
+    --red-1: rgb(248, 43, 6);
+    --green-1: #04c20e;
+}
+
+/* Clases nativas de la tabla */
 .bozQpI  {
     white-space: wrap !important;
+    
 }
 
-button {
-    border:none;
+.sc-bYoCGh {
+    color: var(--blue-3) !important;
+    font-weight: 600;
+    font-size: 1rem;
 }
+
+.sc-cxpSRg {
+    color: var(--gray-3) !important;
+    background-color: var(--blue-2) !important;
+    border-radius: 5px;
+}
+
+.rdt_TableRow:hover {
+    background-color: var(--blue-5); 
+}
+
+/* Clases Normales */
+button {
+    border: none;
+}
+
 
 .iconActions{
-    color: #797070;
-    transition: all 0.2s ease-in-out;
+    color: var(--gray-1);
+    border: 1px solid var(--gray-4);
+    border-radius: 5px;
+    padding: 0.25rem 0.2rem;
+    transition: var(--transition) !important;
 }
 
 .iconActions:hover{
-    color: #313030;
+    color: var(--cyan-1);
+    background-color: var(--purple-1);
+    transform: scale(1.2);
 }
 
 .badge{
     width: 5rem;
 }
+
+.bg-pendiente{
+    border: 1px solid var(--blue-3);
+    color: var(--blue-3) !important;
+}
+
+.bg-rechazado{
+    border: 1px solid var(--red-1);
+    color: var(--red-1) !important;
+}
+
+.bg-cobrado{
+    border: 1px solid var(--green-1);
+    color: var(--green-1) !important;
+}
+
+.btn-agregar {
+    border: 1px solid var(--blue-3) !important;
+    background-color: var(--blue-3) !important;
+    color: white !important;
+    transition: var(--transition) !important;
+}
+
+.btn-agregar:hover{
+    border: 1px solid var(--purple-1) !important;
+    background-color: var(--purple-1) !important;
+    color: var(--cyan-1) !important;
+    transform: scale(0.95);
+}
+
+.btn-pdf, .btn-print{
+    color: var(--gray-3) !important;
+    background-color: var(--purple-1) !important;
+    transition: var(--transition) !important;
+}
+
+.btn-pdf:hover, .btn-print:hover{
+    color: var(--cyan-1) !important;
+    background-color: var(--blue-1) !important;
+    transform: scale(0.93);
+}
+
+.input-search{
+    width: 20rem !important;
+    height: 2.3rem;
+    border: 0.02rem solid var(--gray-4) !important;
+    border-radius: 5px !important;
+    border-bottom: 2px solid var(--blue-1);
+    background-color: var(--tea-color);
+    transition: var(--transition);
+    
+}
+
+.input-search:hover {
+    border-bottom: 2px solid var(--blue-3);
+    background-color: var(--blue-5);
+}
+
+.input-search::placeholder {
+    color: #71827d;
+    font-style: italic;
+    opacity: .75;
+}
+
+.input-search:focus {
+    outline: none;
+}
+
+#basic-addon1 {
+    background-color: var(--purple-1);
+}
+
+#basic-addon1 .icon-search{
+    color: var(--gray-3);
+}
+
