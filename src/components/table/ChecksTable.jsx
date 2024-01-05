@@ -63,7 +63,7 @@ const ChecksTable = () => {
     // Actualiza cheque
     const handleEditCheck = (id) => {
         setSelectCheck(id);
-        console.log("id :>> ", id);
+        // console.log("id :>> ", id);
     };
 
     // Elimina cheque
@@ -142,7 +142,6 @@ const ChecksTable = () => {
         {
             name: "Destino",
             selector: (row) => row.nombreDestino,
-            sortable: true,
             grow: 2,
         },
         {
@@ -152,7 +151,7 @@ const ChecksTable = () => {
                 <div>
                     {row.estado === "pendiente" && (
                         <span className="badge bg-pendiente p-2">
-                            Pendiente
+                            A cobrar
                         </span>
                     )}
                     {row.estado === "rechazado" && (
@@ -166,7 +165,6 @@ const ChecksTable = () => {
                 </div>
             ),
             grow: 1,
-            sortable: true,
         },
         {
             name: "Acciones",
@@ -217,7 +215,7 @@ const ChecksTable = () => {
             return;
         }
         const filterData = checks.filter((row) => {
-            const fieldsToSearch = ["banco", "titular", "monto"];
+            const fieldsToSearch = ["banco", "estado", "monto"];
             return fieldsToSearch.some((field) => {
                 const fieldValue = row[field];
 
@@ -257,7 +255,7 @@ const ChecksTable = () => {
 
     return (
         <section id="tableCheck" className="pt-5">
-            <h2 className="text-center">Listado de Cheques</h2>
+            <h2 className="text-center">Cheques</h2>
             <div className="container mt-5" ref={print}>
                 <div className="row py-3">
                     {/* Btns Actions */}
@@ -289,14 +287,14 @@ const ChecksTable = () => {
 
                         {/* Boton Excel */}
                         <button
-                            className="btn btn-danger ms-2"
+                            className="btn btn-pdf ms-2"
                             onClick={handleExportPDF}
                         >
                             <FontAwesomeIcon icon={faFilePdf} />
                         </button>
                         {/* Boton Imprimir */}
                         <button
-                            className="btn btn-secondary ms-2"
+                            className="btn btn-print ms-2"
                             onClick={handlePrint}
                         >
                             <FontAwesomeIcon icon={faPrint} />
@@ -313,8 +311,8 @@ const ChecksTable = () => {
                     </div>
 
                     {/* Input Search */}
-                    <div className="col-md-8 text-end">
-                        <div className="input-group mb-3">
+                    <div className="col-md-8">
+                        <div className="input-group mb-3  justify-content-end">
                             <span
                                 className="input-group-text"
                                 id="basic-addon1"
