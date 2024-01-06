@@ -1,5 +1,5 @@
 import axios from "../../../server/axiosConfig";
-//import URL_API from "../../../server";
+import {URL_AUTH} from "../../../server";
 import {
     ADD_CHECK_ERROR,
     ADD_CHECK_REQUEST,
@@ -17,6 +17,7 @@ import {
     UPDATE_CHECK_ERROR,
     UPDATE_CHECK_REQUEST,
     UPDATE_CHECK_SUCCESS,
+    LOGIN_SUCCESS
 } from "./actionsType";
 import { dateFormat } from "../../../utils/dateFormat";
 
@@ -133,4 +134,22 @@ export const cleanDetail = () => (dispatch) =>{
     dispatch({
         type: CLEAN_DETAIL
     });
+};
+
+export const login = (username, password) => async (dispatch) =>{
+    try {
+        const response = await axios.post(`${URL_AUTH}/login`, {
+            username,
+            password,
+        });
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: response.data,
+        });
+        return response.data;
+        
+    } catch (error) {
+        console.log(error);
+    }
+
 };
