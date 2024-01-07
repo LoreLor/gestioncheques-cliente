@@ -31,6 +31,8 @@ import ModalAdd from "../modals/ModalAdd";
 // import { DownloadTableExcel } from "react-export-table-to-excel";
 // import { DownloadExcel } from "react-excel-export";
 
+
+
 const ChecksTable = () => {
     const dispatch = useDispatch();
 
@@ -60,10 +62,9 @@ const ChecksTable = () => {
         console.log("id :>> ", id);
     };
 
-    // Actualiza cheque
+    // Capturo id para editar
     const handleEditCheck = (id) => {
         setSelectCheck(id);
-        // console.log("id :>> ", id);
     };
 
     // Elimina cheque
@@ -109,12 +110,12 @@ const ChecksTable = () => {
         }
     }, [checkDel, checks]);
 
-    // Chang text span of table
 
     const columns = [
         {
             name: "Fecha Ingreso",
             selector: (row) => dateFormat(row.fechaRecepcion),
+            sortable: true,
             grow: 2,
         },
         {
@@ -128,8 +129,8 @@ const ChecksTable = () => {
             grow: 2,
         },
         {
-            name: "Banco",
-            selector: (row) => row.banco,
+            name: "Titular",
+            selector: (row) => row.titularCheque,
             sortable: true,
             grow: 2,
         },
@@ -215,7 +216,7 @@ const ChecksTable = () => {
             return;
         }
         const filterData = checks.filter((row) => {
-            const fieldsToSearch = ["banco", "estado", "monto"];
+            const fieldsToSearch = ["banco", "estado", "monto", "titularCheque"];
             return fieldsToSearch.some((field) => {
                 const fieldValue = row[field];
 
@@ -363,10 +364,7 @@ const ChecksTable = () => {
                     handleCloseModal={handleCloseModal}
                     id={selectedCheck}
                 />
-                <ModalAdd
-                    id={selectedCheck}
-                    handleCloseModal={handleCloseModal}
-                />
+                <ModalAdd />
             </div>
         </section>
     );

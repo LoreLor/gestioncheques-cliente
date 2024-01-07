@@ -2,12 +2,17 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/checks";
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ onLoginSuccess }) => {
+
+
+const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +26,8 @@ const Login = ({ onLoginSuccess }) => {
                 if (token) {
                     localStorage.setItem("token", token);
                     console.log("Login exitoso. Token guardado:", token);
-                    onLoginSuccess();
+                    
+                    navigate("/home");
                 } else {
                     setError("Token no encontrado en la respuesta");
                 }

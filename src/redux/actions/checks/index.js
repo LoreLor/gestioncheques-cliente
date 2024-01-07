@@ -94,10 +94,11 @@ export const addCheck = (check) => async(dispatch) => {
         type: ADD_CHECK_REQUEST,
     });
     try {
+        // eslint-disable-next-line no-unused-vars
         const response = await axios.post("/agregar", check);
         dispatch({
             type: ADD_CHECK_SUCCESS,
-            payload: response.data
+            //payload: response.data
         });
         dispatch(allChecks());
 

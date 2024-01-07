@@ -1,19 +1,8 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-
 import validations from "../../utils/validations";
-import { useForm } from "../../hooks/useForm";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { cleanDetail, detailCheck } from "../../redux/actions/checks";
+import { useFormAdd } from "../../hooks/useFormAdd";
 
 
-
-const ModalAdd = ({id}) => {
-    const dispatch = useDispatch();
-    const checkDetail = useSelector((state) => state.detailCheck);
-    const { detail } = checkDetail;
-
+const ModalAdd = () => {
     const initialForm = {
         fechaRecepcion: "",
         fechaCobro: "",
@@ -31,35 +20,9 @@ const ModalAdd = ({id}) => {
     const {
         formData,
         errors,
-        setFormData,
         handleChange,
         handleSubmit,
-    } = useForm(initialForm, validations, id);
-    
-    
-
-    useEffect(() => {
-        if (id) {
-            dispatch(detailCheck(id));
-            setFormData(detail);
-        }
-    }, []);
-
-    const handleCloseModal = () => {
-        dispatch(cleanDetail());  
-    };
-
-    const [editing, setEditing] = useState(false);
-
-
-    useEffect(() => {
-        if (formData.fechaCobro || formData.fechaRecepcion) {
-            setEditing(true);
-        } else {
-            setEditing(false);
-        }
-    }, [formData.fechaCobro, formData.fechaRecepcion]);
-
+    } = useFormAdd(initialForm, validations);
 
 
     return (
@@ -73,13 +36,12 @@ const ModalAdd = ({id}) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2 className="modal-title fs-3">{editing? "Edita el Cheque" : "Registra el Cheque"}</h2>
+                        <h2 className="modal-title fs-3">Registra el Cheque</h2>
                         <button
                             type="button"
                             className="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
-                            onClick={handleCloseModal}
                         ></button>
                     </div>
 
@@ -95,7 +57,7 @@ const ModalAdd = ({id}) => {
                                         Fecha de Recepción:
                                     </label>
                                     <input
-                                        type={editing? "text" : "date"}
+                                        type="date"
                                         id="fechaRecepcion"
                                         name="fechaRecepcion"
                                         value={formData.fechaRecepcion}
@@ -122,7 +84,7 @@ const ModalAdd = ({id}) => {
                                         Fecha de Cobro:
                                     </label>
                                     <input
-                                        type={editing? "text" : "date"}
+                                        type="date"
                                         id="fechaCobro"
                                         name="fechaCobro"
                                         value={formData.fechaCobro}
@@ -445,7 +407,6 @@ const ModalAdd = ({id}) => {
                                     type="button"
                                     className="btn btn-secondary m-2"
                                     data-bs-dismiss="modal"
-                                    onClick={handleCloseModal}
                                 >
                                     Cerrar
                                 </button>
