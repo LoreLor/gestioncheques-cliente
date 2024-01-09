@@ -18,7 +18,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                 </div>
 
                 <a className="navbar-brand" href="/"> <h2>Gestor de Cheques App</h2></a>
-                <div className="collapse navbar-collapse">
+                <div className="navbar-collapse">
                     <ul className="navbar-nav ms-auto gap-3">
                         <li>
                             <a className="nav-link" href="https://www.facebook.com/">

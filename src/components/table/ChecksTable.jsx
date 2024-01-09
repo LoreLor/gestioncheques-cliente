@@ -254,10 +254,9 @@ const ChecksTable = () => {
     });
 
     return (
-        <section id="tableCheck" className="pt-5">
-            <h2 className="text-center">Cheques</h2>
-            <div className="container mt-5" ref={print}>
-                <div className="row py-3">
+        <section id="tableCheck" className="">
+            <div className="container" ref={print}>
+                <div className="row py-1">
                     {/* Btns Actions */}
                     <div className="col-md-4 text-start">
                         {/* <DownloadTableExcel
