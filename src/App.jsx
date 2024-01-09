@@ -3,6 +3,9 @@ import Login from "./components/login/Login";
 import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 
+//import Sidebar from "./components/sidebar/Sidebar";
+import "./index.css";
+
 
 
 function App() {
@@ -13,7 +16,7 @@ function App() {
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
-            </Routes>
+            </Routes> 
         </>
     );
 }
