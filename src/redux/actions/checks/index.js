@@ -1,5 +1,5 @@
-import axios from "../../../server/axiosConfig";
-import {URL_AUTH} from "../../../server";
+import axiosInstance from "../../../server/axiosConfig";
+import { URL_AUTH } from "../../../server";
 import {
     ADD_CHECK_ERROR,
     ADD_CHECK_REQUEST,
@@ -17,8 +17,9 @@ import {
     UPDATE_CHECK_ERROR,
     UPDATE_CHECK_REQUEST,
     UPDATE_CHECK_SUCCESS,
-    LOGIN_SUCCESS
+    LOGIN_SUCCESS,
 } from "./actionsType";
+
 
 
 export const allChecks = () => async (dispatch) => {
@@ -26,7 +27,7 @@ export const allChecks = () => async (dispatch) => {
         type: ALL_CHECKS_REQUEST,
     });
     try {
-        const response = await axios.get("/listaractivos");
+        const response = await axiosInstance.get("/listaractivos");
         dispatch({
             type: ALL_CHECKS_SUCCESS,
             payload: response.data,
@@ -45,7 +46,7 @@ export const detailCheck = (id) => async (dispatch) => {
         payload: id,
     });
     try {
-        const response = await axios.get(`/listar/${id}`);
+        const response = await axiosInstance.get(`/listar/${id}`);
         dispatch({
             type: CHECK_DETAIL_SUCCESS,
             payload: response.data,
@@ -58,62 +59,58 @@ export const detailCheck = (id) => async (dispatch) => {
     }
 };
 
-export const deleteCheck = (id) => async(dispatch) =>{
+export const deleteCheck = (id) => async (dispatch) => {
     dispatch({
         type: DELETE_CHECK_REQUEST,
-        payload: id
+        payload: id,
     });
     try {
         // eslint-disable-next-line no-unused-vars
-        const response = await axios.delete(`/eliminar/${id}`);
+        const response = await axiosInstance.delete(`/eliminar/${id}`);
         dispatch({
             type: DELETE_CHECK_SUCCESS,
             payload: id,
         });
-        
     } catch (error) {
         dispatch({
             type: DELETE_CHECK_ERROR,
-            payload: error
+            payload: error,
         });
     }
-
 };
 
-export const addCheck = (check) => async(dispatch) => {
+export const addCheck = (check) => async (dispatch) => {
     dispatch({
         type: ADD_CHECK_REQUEST,
     });
     try {
         // eslint-disable-next-line no-unused-vars
-        const response = await axios.post("/agregar", check);
+        const response = await axiosInstance.post("/agregar", check);
         dispatch({
             type: ADD_CHECK_SUCCESS,
             //payload: response.data
         });
         dispatch(allChecks());
-
     } catch (error) {
         dispatch({
             type: ADD_CHECK_ERROR,
-            payload: error
+            payload: error,
         });
     }
 };
 
-export const updateCheck = (id, check) => async(dispatch) => {
+export const updateCheck = (id, check) => async (dispatch) => {
     dispatch({
         type: UPDATE_CHECK_REQUEST,
-        payload: id
+        payload: id,
     });
     try {
-        // eslint-disable-next-line no-unused-vars
-        const response = await axios.put(`/modificar/${id}`, check);
-        
+        const response = await axiosInstance.put(`/modificar/${id}`, check);
         dispatch({
             type: UPDATE_CHECK_SUCCESS,
-            //payload: response.data
-        });    
+            payload: response.data,
+        });
+        return response;
     } catch (error) {
         dispatch({
             type: UPDATE_CHECK_ERROR,
@@ -122,15 +119,15 @@ export const updateCheck = (id, check) => async(dispatch) => {
     }
 };
 
-export const cleanDetail = () => (dispatch) =>{
+export const cleanDetail = () => (dispatch) => {
     dispatch({
-        type: CLEAN_DETAIL
+        type: CLEAN_DETAIL,
     });
 };
 
-export const login = (username, password) => async (dispatch) =>{
+export const login = (username, password) => async (dispatch) => {
     try {
-        const response = await axios.post(`${URL_AUTH}/login`, {
+        const response = await axiosInstance.post(`${URL_AUTH}/login`, {
             username,
             password,
         });
@@ -139,9 +136,7 @@ export const login = (username, password) => async (dispatch) =>{
             payload: response.data,
         });
         return response.data;
-        
     } catch (error) {
         console.log(error);
     }
-
 };
