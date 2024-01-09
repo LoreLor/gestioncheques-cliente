@@ -1,25 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Navbar from "../navbar/Navbar";
 import ChecksTable from "../table/ChecksTable";
 import Login from "../login/Login";
 
 const Home = () => {
-    const user = localStorage.getItem("token");
-    const [isAuthenticated, setIsAuthenticated] = useState(user? true: false);
+    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
 
+    useEffect(() => {
+        const user = localStorage.getItem("token");
+        setIsAuthenticated(!!user);
+    }, []);
 
     const handleLoginSuccess = () => {
-        if(user){
-            setIsAuthenticated(true);
-        }
+        setIsAuthenticated(true);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
     };
 
     return (
         <div className="container pt-3">
-            {!isAuthenticated && <Login onLoginSuccess={handleLoginSuccess} />}
-            {isAuthenticated && <ChecksTable />}
+            <Navbar isAuthenticated={() => isAuthenticated} onLogout={handleLogout} />
+
+            {isAuthenticated ? <ChecksTable /> : <Login onLoginSuccess={handleLoginSuccess} />}
         </div>
     );
 };
 
 export default Home;
+
+
 

@@ -1,4 +1,4 @@
-import axios from "../../../server/axiosConfig";
+import axiosInstance from "../../../server/axiosConfig";
 import {URL_AUTH} from "../../../server";
 import {
     ADD_CHECK_ERROR,
@@ -26,7 +26,7 @@ export const allChecks = () => async (dispatch) => {
         type: ALL_CHECKS_REQUEST,
     });
     try {
-        const response = await axios.get("/listaractivos");
+        const response = await axiosInstance.get("/listaractivos");
         dispatch({
             type: ALL_CHECKS_SUCCESS,
             payload: response.data,
@@ -45,7 +45,7 @@ export const detailCheck = (id) => async (dispatch) => {
         payload: id,
     });
     try {
-        const response = await axios.get(`/listar/${id}`);
+        const response = await axiosInstance.get(`/listar/${id}`);
         const formattedData = {
             ...response.data,
             fechaRecepcion: response.data.fechaRecepcion
@@ -74,7 +74,7 @@ export const deleteCheck = (id) => async(dispatch) =>{
     });
     try {
         // eslint-disable-next-line no-unused-vars
-        const response = await axios.delete(`/eliminar/${id}`);
+        const response = await axiosInstance.delete(`/eliminar/${id}`);
         dispatch({
             type: DELETE_CHECK_SUCCESS,
             payload: id,
@@ -94,7 +94,9 @@ export const addCheck = (check) => async(dispatch) => {
         type: ADD_CHECK_REQUEST,
     });
     try {
-        const response = await axios.post("/agregar", check);
+        check.fechaCobro = formatDate(check.fechaCobro);
+        check.fechaRecepcion = formatDate(check.fechaRecepcion);
+        const response = await axiosInstance.post("/agregar", check);
         dispatch({
             type: ADD_CHECK_SUCCESS,
             payload: response.data
@@ -115,13 +117,18 @@ export const updateCheck = (id, check) => async(dispatch) => {
         payload: id
     });
     try {
-        const response = await axios.put(`/modificar/${id}`, check);
-        console.log("este es el id : "+id);
+        /* console.log("este es el id : "+id);
         console.log("este es el cheque " + check);
+        console.log(check.fechaCobro); */
+        check.fechaCobro = formatDate(check.fechaCobro);
+        check.fechaRecepcion = formatDate(check.fechaRecepcion);
+        console.log(check.fechaCobro);
+        const response = await axiosInstance.put(`/modificar/${id}`, check);
         dispatch({
             type: UPDATE_CHECK_SUCCESS,
             payload: response.data
-        });    
+        });
+        return response;
     } catch (error) {
         dispatch({
             type: UPDATE_CHECK_ERROR,
@@ -138,7 +145,7 @@ export const cleanDetail = () => (dispatch) =>{
 
 export const login = (username, password) => async (dispatch) =>{
     try {
-        const response = await axios.post(`${URL_AUTH}/login`, {
+        const response = await axiosInstance.post(`${URL_AUTH}/login`, {
             username,
             password,
         });
@@ -153,3 +160,9 @@ export const login = (username, password) => async (dispatch) =>{
     }
 
 };
+
+function formatDate(dateString) {
+    const [day, month, year] = dateString.split("-");
+    const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    return formattedDate;
+}
