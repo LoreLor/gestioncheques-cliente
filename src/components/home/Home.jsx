@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ChecksTable from "../table/ChecksTable";
+import ChecksTable from "../checksTable/ChecksTable";
 import Login from "../login/Login";
 
 const Home = () => {
@@ -15,8 +15,7 @@ const Home = () => {
 
     return (
         <div className="container pt-3">
-            {!isAuthenticated && <Login onLoginSuccess={handleLoginSuccess} />}
-            {isAuthenticated && <ChecksTable />}
+            {!isAuthenticated ? <Login onLoginSuccess={handleLoginSuccess} /> : <ChecksTable />}
         </div>
     );
 };

@@ -84,6 +84,5 @@ export const useFormAdd = (initialForm, validations) => {
         loading,
         handleChange,
         handleSubmit,
-        resetForm,
     };
 };

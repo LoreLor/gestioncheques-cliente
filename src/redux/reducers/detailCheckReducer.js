@@ -5,6 +5,9 @@ import {
     CLEAN_DETAIL,
     DELETE_CHECK_ERROR,
     DELETE_CHECK_SUCCESS,
+    UPDATE_CHECK_ERROR,
+    UPDATE_CHECK_REQUEST,
+    UPDATE_CHECK_SUCCESS,
 } from "../actions/checks/actionsType";
 
 const initialState = {
@@ -16,14 +19,17 @@ const initialState = {
 export const detailCheckReducer = (state = initialState, action) => {
     switch (action.type) {
     case CHECK_DETAIL_REQUEST:
+    case UPDATE_CHECK_REQUEST:
         return {
             loading: true,
         };
     case CHECK_DETAIL_SUCCESS:
+    case UPDATE_CHECK_SUCCESS:
         return {
             loading: false,
             detail: action.payload,
         };
+
     case CHECK_DETAIL_ERROR:
         return {
             loading: false,
@@ -35,6 +41,7 @@ export const detailCheckReducer = (state = initialState, action) => {
             detail: {}
         };
     case DELETE_CHECK_ERROR:
+    case UPDATE_CHECK_ERROR:
         return {
             ...state,
             error: action.payload

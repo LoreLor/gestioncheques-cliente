@@ -19,7 +19,7 @@ import {
     UPDATE_CHECK_SUCCESS,
     LOGIN_SUCCESS
 } from "./actionsType";
-import { dateFormat } from "../../../utils/dateFormat";
+
 
 export const allChecks = () => async (dispatch) => {
     dispatch({
@@ -46,18 +46,9 @@ export const detailCheck = (id) => async (dispatch) => {
     });
     try {
         const response = await axios.get(`/listar/${id}`);
-        const formattedData = {
-            ...response.data,
-            fechaRecepcion: response.data.fechaRecepcion
-                ? dateFormat(response.data.fechaRecepcion)
-                : null,
-            fechaCobro: response.data.fechaCobro
-                ? dateFormat(response.data.fechaCobro)
-                : null,
-        };
         dispatch({
             type: CHECK_DETAIL_SUCCESS,
-            payload: formattedData,
+            payload: response.data,
         });
     } catch (error) {
         dispatch({
@@ -116,12 +107,12 @@ export const updateCheck = (id, check) => async(dispatch) => {
         payload: id
     });
     try {
+        // eslint-disable-next-line no-unused-vars
         const response = await axios.put(`/modificar/${id}`, check);
-        console.log("este es el id : "+id);
-        console.log("este es el cheque " + check);
+        
         dispatch({
             type: UPDATE_CHECK_SUCCESS,
-            payload: response.data
+            //payload: response.data
         });    
     } catch (error) {
         dispatch({

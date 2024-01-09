@@ -20,7 +20,6 @@ import {
     cleanDetail,
     deleteCheck,
 } from "../../redux/actions/checks";
-import { dateFormat } from "../../utils/dateFormat";
 import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
 import jsPDF from "jspdf";
@@ -28,6 +27,8 @@ import "jspdf-autotable";
 import "./ChecksTable.css";
 import Swal from "sweetalert2";
 import ModalAdd from "../modals/ModalAdd";
+import ModalEdit from "../modals/ModalEdit";
+import { dateFormat } from "../../utils/dateFormat";
 // import { DownloadTableExcel } from "react-export-table-to-excel";
 // import { DownloadExcel } from "react-excel-export";
 
@@ -40,7 +41,7 @@ const ChecksTable = () => {
     const { checks, loading } = checksList;
 
     const [inputData, setInputData] = useState(checks);
-    const [selectedCheck, setSelectCheck] = useState(null);
+    const [selectedCheck, setSelectCheck] = useState("");
     const [checkDel, setCheckDel] = useState(null);
 
     useEffect(() => {
@@ -65,6 +66,7 @@ const ChecksTable = () => {
     // Capturo id para editar
     const handleEditCheck = (id) => {
         setSelectCheck(id);
+        console.log("id :>> ", id);
     };
 
     // Elimina cheque
@@ -110,6 +112,7 @@ const ChecksTable = () => {
         }
     }, [checkDel, checks]);
 
+    console.log("checks :>> ", checks);
 
     const columns = [
         {
@@ -186,7 +189,7 @@ const ChecksTable = () => {
                         href="#"
                         className="me-3"
                         data-bs-toggle="modal"
-                        data-bs-target="#addModal"
+                        data-bs-target="#editModal"
                         onClick={() => handleEditCheck(row.id)}
                     >
                         <FontAwesomeIcon
@@ -267,24 +270,10 @@ const ChecksTable = () => {
                             currentTableRef={tableRef.current}
                         >
                             <div className="btn btn-success">
-                                <FontAwesomeIcon
-                                    icon={faFileExcel}
-                                    className="px-1"
-                                />
+                                Excel
                             </div>
                         </DownloadTableExcel> */}
 
-                        {/* <DownloadExcel
-                            data={checks}
-                            buttonLabel={<div className="btn btn-success">
-                                <FontAwesomeIcon
-                                    icon={faFileExcel}
-                                    className="px-1"
-                                />
-                            </div>}
-                            fileName="Libro1"
-                            className="export-button  border-0"
-                        /> */}
 
                         {/* Boton Excel */}
                         <button
@@ -365,6 +354,9 @@ const ChecksTable = () => {
                     id={selectedCheck}
                 />
                 <ModalAdd />
+                <ModalEdit 
+                    id={selectedCheck}
+                />
             </div>
         </section>
     );
