@@ -20,7 +20,7 @@ const ModalAdd = ({id}) => {
         entregadoPor: "",
         numeroCheque: 0,
         banco: "",
-        monto: 0,
+        monto: 0.00,
         titularCheque: "",
         cuit: "",
         estado: "",
