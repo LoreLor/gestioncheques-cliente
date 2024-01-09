@@ -1,8 +1,11 @@
+/* eslint-disable react/prop-types */
+
+import { useFormEdit } from "../../hooks/useFormEdit";
 import validations from "../../utils/validations";
-import { useFormAdd } from "../../hooks/useFormAdd";
 
 
-const ModalAdd = () => {
+
+const ModalEdit = ({ id }) => {  
     const initialForm = {
         fechaRecepcion: "",
         fechaCobro: "",
@@ -22,21 +25,21 @@ const ModalAdd = () => {
         errors,
         handleChange,
         handleSubmit,
-    } = useFormAdd(initialForm, validations);
+    } = useFormEdit(initialForm, validations, id);
 
 
     return (
         <div
             className="modal fade modal-lg"
-            id="addModal"
+            id="editModal"
             tabIndex="-1"
-            aria-labelledby="addModalLabel"
+            aria-labelledby="editModalLabel"
             aria-hidden="false"
         >
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2 className="modal-title fs-3">Registra el Cheque</h2>
+                        <h2 className="modal-title fs-3">Editar Cheque</h2>
                         <button
                             type="button"
                             className="btn-close"
@@ -56,11 +59,12 @@ const ModalAdd = () => {
                                     >
                                         Fecha de Recepción:
                                     </label>
+            
                                     <input
                                         type="date"
                                         id="fechaRecepcion"
                                         name="fechaRecepcion"
-                                        value={formData.fechaRecepcion}
+                                        value={formData.fechaRecepcion ? new Date(formData.fechaRecepcion).toISOString().split("T")[0] : ""}
                                         onChange={handleChange}
                                         className="form-control"
                                     />
@@ -87,7 +91,7 @@ const ModalAdd = () => {
                                         type="date"
                                         id="fechaCobro"
                                         name="fechaCobro"
-                                        value={formData.fechaCobro}
+                                        value={formData.fechaCobro ? new Date(formData.fechaCobro).toISOString().split("T")[0] : ""}
                                         onChange={handleChange}
                                         className="form-control"
                                     />
@@ -140,7 +144,7 @@ const ModalAdd = () => {
                                         Número de Cheque:
                                     </label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         id="numeroCheque"
                                         name="numeroCheque"
                                         value={formData.numeroCheque}
@@ -419,4 +423,4 @@ const ModalAdd = () => {
     );
 };
 
-export default ModalAdd;
+export default ModalEdit;

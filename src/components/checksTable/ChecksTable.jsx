@@ -20,7 +20,6 @@ import {
     cleanDetail,
     deleteCheck,
 } from "../../redux/actions/checks";
-import { dateFormat } from "../../utils/dateFormat";
 import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
 import jsPDF from "jspdf";
@@ -28,8 +27,12 @@ import "jspdf-autotable";
 import "./ChecksTable.css";
 import Swal from "sweetalert2";
 import ModalAdd from "../modals/ModalAdd";
+import ModalEdit from "../modals/ModalEdit";
+import { dateFormat } from "../../utils/dateFormat";
 // import { DownloadTableExcel } from "react-export-table-to-excel";
 // import { DownloadExcel } from "react-excel-export";
+
+
 
 const ChecksTable = () => {
     const dispatch = useDispatch();
@@ -38,7 +41,7 @@ const ChecksTable = () => {
     const { checks, loading } = checksList;
 
     const [inputData, setInputData] = useState(checks);
-    const [selectedCheck, setSelectCheck] = useState(null);
+    const [selectedCheck, setSelectCheck] = useState("");
     const [checkDel, setCheckDel] = useState(null);
 
     useEffect(() => {
@@ -60,10 +63,10 @@ const ChecksTable = () => {
         console.log("id :>> ", id);
     };
 
-    // Actualiza cheque
+    // Capturo id para editar
     const handleEditCheck = (id) => {
         setSelectCheck(id);
-        // console.log("id :>> ", id);
+        console.log("id :>> ", id);
     };
 
     // Elimina cheque
@@ -109,12 +112,13 @@ const ChecksTable = () => {
         }
     }, [checkDel, checks]);
 
-    // Chang text span of table
+    console.log("checks :>> ", checks);
 
     const columns = [
         {
             name: "Fecha Ingreso",
             selector: (row) => dateFormat(row.fechaRecepcion),
+            sortable: true,
             grow: 2,
         },
         {
@@ -128,8 +132,8 @@ const ChecksTable = () => {
             grow: 2,
         },
         {
-            name: "Banco",
-            selector: (row) => row.banco,
+            name: "Titular",
+            selector: (row) => row.titularCheque,
             sortable: true,
             grow: 2,
         },
@@ -185,7 +189,7 @@ const ChecksTable = () => {
                         href="#"
                         className="me-3"
                         data-bs-toggle="modal"
-                        data-bs-target="#addModal"
+                        data-bs-target="#editModal"
                         onClick={() => handleEditCheck(row.id)}
                     >
                         <FontAwesomeIcon
@@ -215,7 +219,7 @@ const ChecksTable = () => {
             return;
         }
         const filterData = checks.filter((row) => {
-            const fieldsToSearch = ["banco", "estado", "monto"];
+            const fieldsToSearch = ["banco", "estado", "monto", "titularCheque"];
             return fieldsToSearch.some((field) => {
                 const fieldValue = row[field];
 
@@ -266,24 +270,10 @@ const ChecksTable = () => {
                             currentTableRef={tableRef.current}
                         >
                             <div className="btn btn-success">
-                                <FontAwesomeIcon
-                                    icon={faFileExcel}
-                                    className="px-1"
-                                />
+                                Excel
                             </div>
                         </DownloadTableExcel> */}
 
-                        {/* <DownloadExcel
-                            data={checks}
-                            buttonLabel={<div className="btn btn-success">
-                                <FontAwesomeIcon
-                                    icon={faFileExcel}
-                                    className="px-1"
-                                />
-                            </div>}
-                            fileName="Libro1"
-                            className="export-button  border-0"
-                        /> */}
 
                         {/* Boton Excel */}
                         <button
@@ -363,9 +353,9 @@ const ChecksTable = () => {
                     handleCloseModal={handleCloseModal}
                     id={selectedCheck}
                 />
-                <ModalAdd
+                <ModalAdd />
+                <ModalEdit 
                     id={selectedCheck}
-                    handleCloseModal={handleCloseModal}
                 />
             </div>
         </section>
