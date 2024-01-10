@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import axiosInstance from "../../../server/axiosConfig";
 import { URL_AUTH } from "../../../server";
 import {
@@ -126,17 +127,24 @@ export const cleanDetail = () => (dispatch) => {
     });
 };
 
-export const login = (username, password) => async (dispatch) => {
+export const login = (body) => async (dispatch) => {
     try {
-        const response = await axiosInstance.post(`${URL_AUTH}/login`, {
-            username,
-            password,
-        });
+        const response = await axiosInstance.post(`${URL_AUTH}/login`, body);
+
+        const token = response.data.token;
+
+        if (token) {
+            localStorage.setItem("token", token);
+            console.log("Login exitoso. Token guardado:", token);
+        } else {
+            console.error("Token no encontrado en la respuesta");
+        }
+        
         dispatch({
             type: LOGIN_SUCCESS,
-            payload: response.data,
+            payload: token,
         });
-        return response.data;
+
     } catch (error) {
         console.log(error);
     }
