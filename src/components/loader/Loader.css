@@ -12,7 +12,7 @@
     border-radius: 50%;
     width: 10rem;
     height: 10rem;
-    color: #49d811;
+    color: #081A51;
 }
 .loader:before,
 .loader:after {
@@ -28,7 +28,7 @@
     animation: 2s spin linear infinite;
 }
 .loader:after {
-    color: #ff3d00;
+    color: #08f3f3e3;
     transform: rotateY(70deg);
     animation-delay: 0.4s;
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addCheck } from "../redux/actions/checks";
+import { addCheck, allChecks } from "../redux/actions/checks";
 import Swal from "sweetalert2";
 
 export const useFormAdd = (initialForm, validations) => {
@@ -10,6 +10,7 @@ export const useFormAdd = (initialForm, validations) => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -76,6 +77,11 @@ export const useFormAdd = (initialForm, validations) => {
             return;
         }
     };
+
+    useEffect(() => {
+        dispatch(allChecks());
+    },[]);
+
 
     return {
         formData,

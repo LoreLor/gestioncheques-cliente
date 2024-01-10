@@ -1,6 +1,5 @@
 import axios from "axios";
 import { URL_API } from "./index.js";
-import Home from "../components/home/Home.jsx";
 
 const axiosInstance = axios.create({
     baseURL: URL_API,
@@ -29,7 +28,7 @@ axiosInstance.interceptors.response.use(
             localStorage.clear();
   
             // Redirigir al usuario a la página de inicio de sesión o a la página principal
-            window.location.href = Home; // Redireccionar con el Dom o a la vista de error
+            
         }
   
         return Promise.reject(error);

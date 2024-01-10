@@ -1,22 +1,24 @@
+// Home.jsx
 import { useState, useEffect } from "react";
 import Navbar from "../navbar/Navbar";
-//import ChecksTable from "../table/ChecksTable";
 import Login from "../login/Login";
 import Sidebar from "../sidebar/Sidebar";
 import "./Home.css";
+import { useSelector } from "react-redux";
 
 const Home = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+    const user = useSelector((state) => state.login);
+    const token = localStorage.getItem("token");
+    const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
-    const user = localStorage.getItem("token");
     useEffect(() => {
-        setIsAuthenticated(!!user);
-    }, []);
+        if (user) {
+            setIsAuthenticated(token);
+        }
+    }, [token]);
 
     const handleLoginSuccess = () => {
-        if(user){
-            setIsAuthenticated(true);
-        }
+        setIsAuthenticated(true);
     };
 
     const handleLogout = () => {
@@ -25,16 +27,17 @@ const Home = () => {
     };
 
     return (
-        <div className="container pt-3">
-            <Navbar isAuthenticated={() => isAuthenticated} onLogout={handleLogout} />
-            
-            {isAuthenticated ? <Sidebar /> : <Login onLoginSuccess={handleLoginSuccess} />}
-            {/* // {isAuthenticated ? <ChecksTable /> : <p>Not found </p>} */}
+        <div className="container-fluid pt-3">
+            {isAuthenticated ? (
+                <>
+                    <Navbar isAuthenticated={() => isAuthenticated} onLogout={handleLogout} />
+                    <Sidebar />
+                </>
+            ) : (
+                <Login onLoginSuccess={handleLoginSuccess} />
+            )}
         </div>
     );
 };
 
 export default Home;
-
-
-

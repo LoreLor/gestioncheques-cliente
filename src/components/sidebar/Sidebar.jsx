@@ -24,7 +24,7 @@ function Sidebar() {
                 <img
                     src={control}
                     className={`absolute cursor-pointer -right-3 top-15 w-7 border-dark-purple
-           border-2 rounded-full  ${!open && "rotate-180"}`}
+                        border-2 rounded-full  ${!open && "rotate-180"}`}
                     onClick={() => setOpen(!open)} />
                 <div className="flex gap-x-4 items-center ">
                     <img
@@ -33,7 +33,7 @@ function Sidebar() {
                     <h1
                         className={`text-white origin-left font-medium text-xl duration-200 ${!open && "scale-0"}`}
                     >
-            chekAR
+                        chekAR
                     </h1>
                 </div>
                 <ul className="pt-6 px-0 me-5 w-100" >
@@ -41,7 +41,7 @@ function Sidebar() {
                         <li
                             key={index}
                             className={`flex  rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 
-              ${Menu.gap ? "mt-3" : "mt-1"} ${index === 0 && "bg-light-white" }`}
+                            ${Menu.gap ? "mt-3" : "mt-1"} ${index === 0 && "bg-light-white" }`}
                         >
                             <img src={`./src/assets/${Menu.src}.png`} />
                             <span className={`${!open && "hidden"} origin-left duration-200`}>
