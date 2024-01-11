@@ -24,13 +24,12 @@ import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import "./ChecksTable.css";
 import Swal from "sweetalert2";
 import ModalAdd from "../modals/ModalAdd";
 import ModalEdit from "../modals/ModalEdit";
+import "./ChecksTable.css";
 import { dateFormat } from "../../utils/dateFormat";
-// import { DownloadTableExcel } from "react-export-table-to-excel";
-// import { DownloadExcel } from "react-excel-export";
+
 
 
 
@@ -60,13 +59,11 @@ const ChecksTable = () => {
     // captura el id del cheque
     const handleView = (id) => {
         setSelectCheck(id);
-        console.log("id :>> ", id);
     };
 
     // Capturo id para editar
     const handleEditCheck = (id) => {
         setSelectCheck(id);
-        console.log("id :>> ", id);
     };
 
     // Elimina cheque
@@ -112,7 +109,6 @@ const ChecksTable = () => {
         }
     }, [checkDel, checks]);
 
-    console.log("checks :>> ", checks);
 
     const columns = [
         {
@@ -218,16 +214,18 @@ const ChecksTable = () => {
         if (!checks) {
             return;
         }
+
         const filterData = checks.filter((row) => {
-            const fieldsToSearch = ["banco", "estado", "monto", "titularCheque"];
+            const fieldsToSearch = ["estado", "monto", "titularCheque"];
+            
             return fieldsToSearch.some((field) => {
                 const fieldValue = row[field];
 
                 if (typeof fieldValue === "string") {
-                    return fieldValue.toLowerCase().includes(searchText);
+                    return fieldValue.toLowerCase().startsWith(searchText);
                 } else if (typeof fieldValue === "number") {
                     const fieldValueAsString = String(fieldValue).toLowerCase();
-                    return fieldValueAsString.includes(searchText);
+                    return fieldValueAsString.startsWith(searchText);
                 }
                 return false;
             });
@@ -313,7 +311,7 @@ const ChecksTable = () => {
                                 onChange={handleFilter}
                                 name="search"
                                 className="input-search ps-2"
-                                placeholder="por monto, banco o titular..."
+                                placeholder="por monto, estado o titular..."
                                 aria-label="Searcher..." 
                                 aria-describedby="basic-addon1"
                             />
