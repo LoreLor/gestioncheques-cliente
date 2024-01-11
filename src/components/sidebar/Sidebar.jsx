@@ -5,11 +5,11 @@ import logo from "../../assets/logo.png";
 import control from "../../assets/control.png";
 
 function Sidebar() {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const Menus = [
-        { title: "Registrar Cheque", src: "Chart_fill", gap: true  },
-        { title: "Buscar", src: "Search", gap: true },
         { title: "Calendario ", src: "Calendar", gap: true },
+        { title: "Buscar", src: "Search", gap: true },
+        { title: "Registrar Cheque", src: "Cheque2", gap: true  },
         { title: "Exportar ", src: "Folder", gap: true},
         { title: "Estadisticas", src: "Chart", gap: true },
         { title: "Cuenta", src: "User", gap: true },

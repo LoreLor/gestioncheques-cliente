@@ -24,6 +24,7 @@ const Home = () => {
     const handleLogout = () => {
         localStorage.removeItem("token");
         setIsAuthenticated(false);
+        //vaciar estados checks-detail-login
     };
 
     return (
