@@ -11,8 +11,6 @@
     --blue-3: #1199c2;
     --blue-4: #0954e0;
     --blue-5: #50b5f83d;
-    --red-1: rgb(248, 43, 6);
-    --green-1: #04c20e;
 }
 
 /* Clases nativas de la tabla */
@@ -26,6 +24,7 @@
     font-weight: 600;
     font-size: 1rem;
 }
+
 
 .sc-cxpSRg {
     color: var(--gray-3) !important;

@@ -1,12 +1,15 @@
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 
 const Navbar = ({ isAuthenticated, onLogout }) => {
+    const navigate = useNavigate();
     const handleLogout = () => {
         if (onLogout) {
             onLogout();
+            navigate("/");
         }
     };
 

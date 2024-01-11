@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { detailCheck } from "../../redux/actions/checks";
 import DetailCheck from "../check/DetailCheck";
 
+
+
 const ModalView = ({id}) => {
     const dispatch = useDispatch();
     const checkDetail = useSelector((state) => state.detailCheck);
