@@ -1,10 +1,11 @@
 export const customStyles = {
     rows: {
         style: {
-            minHeight: "2.8rem", 
+            minHeight: "2rem", 
             background:"#f8fcfb67 ",
             textAlign: "center",
             width: "100%",
+            
         },
     },
     headCells: {
@@ -30,7 +31,9 @@ export const customStyles = {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            border:"1px solid #e8f5f4b9"
+            border:"1px solid #e8f5f4b9",
+            paddingTop: "6px",
+            paddingBottom: "5px"
         },
     },
     

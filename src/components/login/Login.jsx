@@ -29,17 +29,13 @@ const Login = () => {
             && input.username !== ""
             && input.password !== ""
         ){
-            let response;
-            try {
-                response = await dispatch(login(input));
-                
-                if (response.token.status === 200) {
-                    setInput({
-                        username: "",
-                        password: "",
-                    });
-                    navigate("/login");
-                }
+            try{
+                await dispatch(login(input));
+                setInput({
+                    username: "",
+                    password: "",
+                });
+
             } catch (err) {
                 setError("Usuario o contraseña incorrectos");
                 console.error("Error al iniciar sesión:", err);

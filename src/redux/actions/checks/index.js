@@ -90,6 +90,7 @@ export const addCheck = (check) => async (dispatch) => {
         const response = await axiosInstance.post("/agregar", check);
         dispatch({
             type: ADD_CHECK_SUCCESS,
+            payload: response.data
             
         });
         dispatch(allChecks());

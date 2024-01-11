@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
             localStorage.clear();
   
             // Redirigir al usuario a la página de inicio de sesión o a la página principal
-            
+            window.location.reload();
         }
   
         return Promise.reject(error);

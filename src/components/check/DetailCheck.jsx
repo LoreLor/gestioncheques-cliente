@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-
 import { dateFormat } from "../../utils/dateFormat";
+import "./DetailCheck.css";
+
 
 const DetailCheck = ({checks}) => {
 

@@ -9,7 +9,7 @@ export const loginReducer = (state = initialState, action) => {
     case LOGIN_SUCCESS:
         return { 
             ...state,
-            user: action.payload.token
+            user: action.payload
         };
     default:
         return state;
