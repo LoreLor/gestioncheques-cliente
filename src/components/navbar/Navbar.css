@@ -1,0 +1,15 @@
+.circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #3498db; /* Puedes cambiar el color de fondo según tus necesidades */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff; /* Color del texto */
+    font-size: 14px; /* Tamaño de la letra */
+    font-weight: bold; /* Peso de la letra, puedes ajustar según tus preferencias */
+  }
+  .icon-color {
+    color: #ffffff;
+  }
