@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEdit,
     faEye,
-    //faFileExcel,
     faFilePdf,
     faMagnifyingGlass,
     faPrint,
@@ -22,13 +21,14 @@ import {
 } from "../../redux/actions/checks";
 import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import Swal from "sweetalert2";
 import ModalAdd from "../modals/ModalAdd";
 import ModalEdit from "../modals/ModalEdit";
 import "./ChecksTable.css";
 import { dateFormat } from "../../utils/dateFormat";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { DownloadExcel } from "react-excel-export";
 
 
 
@@ -255,24 +255,22 @@ const ChecksTable = () => {
         content: () => print.current,
     });
 
+
     return (
         <section id="tableCheck" className="">
             <div className="container" ref={print}>
                 <div className="row py-1">
                     {/* Btns Actions */}
                     <div className="col-md-4 text-start">
-                        {/* <DownloadTableExcel
-                            filename="Listado de Cheques"
-                            sheet="cheques"
-                            currentTableRef={tableRef.current}
-                        >
-                            <div className="btn btn-success">
-                                Excel
-                            </div>
-                        </DownloadTableExcel> */}
-
-
-                        {/* Boton Excel */}
+                        {/* Btn Excel */}
+                        <div className="btn btn-excel fs-6 px-3 ">
+                            <DownloadExcel
+                                data={inputData}
+                                buttonLabel="X"
+                                fileName="Libro1"
+                            />
+                        </div>
+                        {/* Boton PDF */}
                         <button
                             className="btn btn-pdf ms-2"
                             onClick={handleExportPDF}
