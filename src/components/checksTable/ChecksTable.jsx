@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEdit,
     faEye,
-    //faFileExcel,
     faFilePdf,
     faMagnifyingGlass,
     faPrint,
@@ -22,13 +21,14 @@ import {
 } from "../../redux/actions/checks";
 import Loader from "../loader/Loader";
 import ModalView from "../modals/ModalView";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import Swal from "sweetalert2";
 import ModalAdd from "../modals/ModalAdd";
 import ModalEdit from "../modals/ModalEdit";
 import "./ChecksTable.css";
 import { dateFormat } from "../../utils/dateFormat";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { DownloadExcel}  from "react-excel-export";
 
 
 
@@ -236,17 +236,41 @@ const ChecksTable = () => {
 
     // Función para exportar a PDF
     const handleExportPDF = () => {
-        const pdfColumns = columns.map((col) => col.name);
-        const pdfData = inputData.map((row) =>
-            columns.map((col) => row[col.selector])
-        );
+        //me creo el pdf
+        const pdfDoc = new jsPDF();
+        
+        // Campos no quiero aparezcan
+        const fieldsToExclude = ["id", "estado", "activo"];
 
-        const doc = new jsPDF();
-        doc.autoTable({
-            head: [pdfColumns],
-            body: pdfData,
+        const filterData = inputData.map(obj => {
+            const filteredObj = Object.fromEntries(Object.entries(obj).map(([key, value]) => {
+                return [key, key.includes("fecha") ? dateFormat(value) : value];
+            }).filter(([key]) => !fieldsToExclude.includes(key)));
+            return filteredObj;
         });
-        doc.save("table.pdf");
+        
+        const styles = {
+            fontSize: 6, 
+            cellPadding: 2,
+            textColor: [50, 50,50], 
+        };
+
+        const headers =  Object.keys(filterData[0]);
+        const headStyles = { 
+            textColor: [255, 255, 255], 
+        };
+    
+
+        // agrego tabla a pdf
+        pdfDoc.autoTable({
+            head: [headers],
+            body: filterData.map(obj => Object.values(obj)),
+            styles: styles,
+            headStyles: headStyles
+        });
+
+        // guardo como pdf
+        pdfDoc.save("cheques.pdf");
     };
 
     // Funcion para mandar a impresion
@@ -255,24 +279,22 @@ const ChecksTable = () => {
         content: () => print.current,
     });
 
+
     return (
         <section id="tableCheck" className="">
             <div className="container" ref={print}>
                 <div className="row py-1">
                     {/* Btns Actions */}
                     <div className="col-md-4 text-start">
-                        {/* <DownloadTableExcel
-                            filename="Listado de Cheques"
-                            sheet="cheques"
-                            currentTableRef={tableRef.current}
-                        >
-                            <div className="btn btn-success">
-                                Excel
-                            </div>
-                        </DownloadTableExcel> */}
-
-
-                        {/* Boton Excel */}
+                        {/* Btn Excel */}
+                        <div className="btn btn-excel fs-6 px-3 ">
+                            <DownloadExcel
+                                data={inputData}
+                                buttonLabel="X"
+                                fileName="Libro1"
+                            />
+                        </div>
+                        {/* Boton PDF */}
                         <button
                             className="btn btn-pdf ms-2"
                             onClick={handleExportPDF}
