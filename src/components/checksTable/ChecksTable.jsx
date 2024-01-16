@@ -28,7 +28,7 @@ import "./ChecksTable.css";
 import { dateFormat } from "../../utils/dateFormat";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { DownloadExcel } from "react-excel-export";
+import { DownloadExcel}  from "react-excel-export";
 
 
 
@@ -236,17 +236,41 @@ const ChecksTable = () => {
 
     // Función para exportar a PDF
     const handleExportPDF = () => {
-        const pdfColumns = columns.map((col) => col.name);
-        const pdfData = inputData.map((row) =>
-            columns.map((col) => row[col.selector])
-        );
+        //me creo el pdf
+        const pdfDoc = new jsPDF();
+        
+        // Campos no quiero aparezcan
+        const fieldsToExclude = ["id", "estado", "activo"];
 
-        const doc = new jsPDF();
-        doc.autoTable({
-            head: [pdfColumns],
-            body: pdfData,
+        const filterData = inputData.map(obj => {
+            const filteredObj = Object.fromEntries(Object.entries(obj).map(([key, value]) => {
+                return [key, key.includes("fecha") ? dateFormat(value) : value];
+            }).filter(([key]) => !fieldsToExclude.includes(key)));
+            return filteredObj;
         });
-        doc.save("table.pdf");
+        
+        const styles = {
+            fontSize: 6, 
+            cellPadding: 2,
+            textColor: [50, 50,50], 
+        };
+
+        const headers =  Object.keys(filterData[0]);
+        const headStyles = { 
+            textColor: [255, 255, 255], 
+        };
+    
+
+        // agrego tabla a pdf
+        pdfDoc.autoTable({
+            head: [headers],
+            body: filterData.map(obj => Object.values(obj)),
+            styles: styles,
+            headStyles: headStyles
+        });
+
+        // guardo como pdf
+        pdfDoc.save("cheques.pdf");
     };
 
     // Funcion para mandar a impresion
