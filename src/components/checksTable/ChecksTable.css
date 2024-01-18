@@ -97,7 +97,9 @@ button {
     transition: var(--transition) !important;
 }
 
-.btn-pdf:hover, .btn-print:hover{
+.btn-pdf:hover, 
+.btn-print:hover, 
+.btn-excel:hover{
     color: var(--cyan-1) !important;
     background-color: var(--blue-1) !important;
     transform: scale(0.93);

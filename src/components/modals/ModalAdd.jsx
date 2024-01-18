@@ -347,7 +347,7 @@ const ModalAdd = () => {
                                         className="form-check-label"
                                         htmlFor="pendiente"
                                     >
-                                        Pendiente
+                                        A Cobrar
                                     </label>
                                 </div>
                                 {/* Cobrado */}

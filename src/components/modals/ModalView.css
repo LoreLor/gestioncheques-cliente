@@ -1,0 +1,32 @@
+:root{
+    --transition: all 0.3s ease-in-out; 
+    --purple-1: #081A51;
+    --gray-1: #71827d;
+    --gray-2: #313030;
+    --gray-3: #f5eeee;
+    --gray-4: #dfd2d2;
+    --cyan-1: #08f3f3e3;
+    --blue-1: #03122ef8;
+    --blue-2: #1199c2af;
+    --blue-3: #1199c2;
+    --blue-4: #0954e0;
+    --blue-5: #50b5f83d;
+}
+
+.modal-header {
+    align-items: 'center';
+    gap: 2.5rem;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem !important;
+}
+.modal-header span {
+    padding-left: 0.8rem;
+    color: var(--blue-3);
+}
+
+.modal-body {
+    flex-direction: column !important;
+    align-items: center !important;
+}
