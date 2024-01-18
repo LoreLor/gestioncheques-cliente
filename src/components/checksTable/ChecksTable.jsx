@@ -28,7 +28,8 @@ import "./ChecksTable.css";
 import { dateFormat } from "../../utils/dateFormat";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { DownloadExcel}  from "react-excel-export";
+import { DownloadExcel } from "react-excel-export";
+
 
 
 
@@ -43,13 +44,6 @@ const ChecksTable = () => {
     const [selectedCheck, setSelectCheck] = useState("");
     const [checkDel, setCheckDel] = useState(null);
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            dispatch(allChecks());
-        }, 2000);
-
-        return () => clearTimeout(timeout);
-    }, []);
 
     useEffect(() => {
         const chec = checks;
@@ -239,7 +233,7 @@ const ChecksTable = () => {
         //me creo el pdf
         const pdfDoc = new jsPDF();
         
-        // Campos no quiero aparezcan
+        // Campos que no quiero aparezcan
         const fieldsToExclude = ["id", "estado", "activo"];
 
         const filterData = inputData.map(obj => {
@@ -291,7 +285,7 @@ const ChecksTable = () => {
                             <DownloadExcel
                                 data={inputData}
                                 buttonLabel="X"
-                                fileName="Libro1"
+                                fileName={"Libro1"}
                             />
                         </div>
                         {/* Boton PDF */}
@@ -367,7 +361,7 @@ const ChecksTable = () => {
                     </div>
                 )}
 
-                {/* Modal Ver Detalle */}
+                {/* Modales */}
                 <ModalView
                     handleCloseModal={handleCloseModal}
                     id={selectedCheck}

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { detailCheck } from "../../redux/actions/checks";
 import DetailCheck from "../check/DetailCheck";
+import "./ModalView.css";
 
 
 
@@ -29,8 +30,8 @@ const ModalView = ({id}) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2 className="modal-title fs-5" id="detailModalLabel">
-                            Detalle del Cheque
+                        <h2 className="modal-title" id="detailModalLabel">
+                            DETALLES CHEQUE N°  <span>{detail && detail.numeroCheque}</span>
                         </h2>
                         <button
                             type="button"

@@ -23,8 +23,8 @@ export const useFormEdit = (initialForm, validations, id) => {
     useEffect(() => {
         if (detail) {
             setFormData({
-                fechaRecepcion: detail.fechaRecepcion,
-                fechaCobro: detail.fechaCobro,
+                fechaRecepcion: detail.fechaRecepcion ?? "",
+                fechaCobro: detail.fechaCobro ?? "",
                 entregadoPor: detail.entregadoPor ?? "",
                 numeroCheque: detail.numeroCheque ?? 0,
                 banco: detail.banco ?? "",
